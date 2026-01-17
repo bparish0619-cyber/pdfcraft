@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PDFCraft</string>
+    <string name="title_activity_main">PDFCraft</string>
+    <string name="package_name">com.pdfcraft.app</string>
+    <string name="custom_url_scheme">com.pdfcraft.app</string>
+</resources>

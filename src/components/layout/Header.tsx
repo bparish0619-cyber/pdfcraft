@@ -11,6 +11,7 @@ import { RecentFilesDropdown } from '@/components/common/RecentFilesDropdown';
 import { searchTools, SearchResult } from '@/lib/utils/search';
 import { getToolContent } from '@/config/tool-content';
 import { getAllTools } from '@/config/tools';
+import { ThemeToggle } from './ThemeToggle';
 
 export interface HeaderProps {
   locale: Locale;
@@ -325,6 +326,9 @@ export const Header: React.FC<HeaderProps> = ({ locale, showSearch = true }) => 
             >
               <Github className="h-5 w-5" aria-hidden="true" />
             </a>
+
+            {/* Dark Mode Toggle */}
+            <ThemeToggle />
 
             {/* Language Selector placeholder */}
             <div id="language-selector-slot" />
