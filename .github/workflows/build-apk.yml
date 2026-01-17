@@ -33,13 +33,20 @@ jobs:
           java-version: "17"
           distribution: "zulu"
 
+      - name: Setup Gradle Cache
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: wrapper
+
       - name: Sync Capacitor
         run: |
           npx @capacitor/cli sync android
 
       - name: Build APK
         working-directory: android
-        run: ./gradlew assembleDebug
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
