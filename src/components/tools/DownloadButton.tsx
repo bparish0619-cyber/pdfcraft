@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button, type ButtonProps } from '../ui/Button';
 import { addRecentFile } from '@/lib/storage/recent-files';
 import { useToolContext } from '@/lib/contexts/ToolContext';
+import { isAndroid, saveBlobToAndroid } from '@/lib/android-download';
 
 export interface DownloadButtonProps extends Omit<ButtonProps, 'onClick' | 'children'> {
   /** Blob data to download */
@@ -32,11 +33,11 @@ export interface DownloadButtonProps extends Omit<ButtonProps, 'onClick' | 'chil
  */
 function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
-  
+
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
 }
 
@@ -66,7 +67,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
   const t = useTranslations('common');
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  
+
   // Get tool info from context if not provided via props
   const toolContext = useToolContext();
   const toolSlug = propToolSlug || toolContext?.toolSlug;
@@ -77,7 +78,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
     if (file) {
       const url = URL.createObjectURL(file);
       setBlobUrl(url);
-      
+
       // Cleanup function to revoke URL when component unmounts or file changes
       return () => {
         URL.revokeObjectURL(url);
@@ -93,6 +94,27 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
   const handleDownload = useCallback(() => {
     if (!file || !blobUrl || isDownloading) return;
 
+    // Android download handler
+    if (isAndroid() && file) {
+      setIsDownloading(true);
+      onDownloadStart?.();
+
+      saveBlobToAndroid(file, filename)
+        .then(() => {
+          setIsDownloading(false);
+          onDownloadComplete?.();
+          if (toolSlug) {
+            addRecentFile(filename, file.size, toolSlug, toolName);
+          }
+        })
+        .catch((err) => {
+          console.error('Download failed:', err);
+          setIsDownloading(false);
+          // Fallback to web download if native fails?
+        });
+      return;
+    }
+
     setIsDownloading(true);
     onDownloadStart?.();
 
@@ -101,7 +123,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
     link.href = blobUrl;
     link.download = filename;
     link.style.display = 'none';
-    
+
     // Append to body, click, and remove
     document.body.appendChild(link);
     link.click();
@@ -112,7 +134,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
       setTimeout(() => {
         URL.revokeObjectURL(blobUrl);
         setBlobUrl(null);
-        
+
         // Recreate URL for potential re-download
         if (file) {
           const newUrl = URL.createObjectURL(file);
@@ -125,7 +147,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
     setTimeout(() => {
       setIsDownloading(false);
       onDownloadComplete?.();
-      
+
       // Record to recent files if tool info is provided
       if (toolSlug && file) {
         addRecentFile(filename, file.size, toolSlug, toolName);
@@ -168,7 +190,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
           />
         </svg>
       )}
-      
+
       <span>
         {buttonText}
         {fileSizeText}
