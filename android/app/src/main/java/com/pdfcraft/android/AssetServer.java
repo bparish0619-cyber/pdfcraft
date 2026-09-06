@@ -42,6 +42,22 @@ public final class AssetServer extends NanoHTTPD {
             response = newFixedLengthResponse(Response.Status.METHOD_NOT_ALLOWED, "text/plain", "Read only");
         } else if (path == null) {
             response = newFixedLengthResponse(Response.Status.FORBIDDEN, "text/plain", "Invalid path");
+        } else if (session.getMethod() == Method.HEAD) {
+            // A chunked response answers HEAD with the whole body and
+            // "Content-Length: -1", so the reply is unframed and the next request
+            // on the same keep-alive connection reads this body as its headers.
+            // LibreOffice's environment check HEADs five assets at once, so that
+            // corruption surfaced as an intermittent failure to fetch one of them.
+            // An empty body with the asset's length declared reports the real size
+            // in a single Content-Length and writes no bytes, because the send loop
+            // stops at end of stream.
+            try (InputStream probe = source.open(path)) {
+                response = newFixedLengthResponse(Response.Status.OK, mimeType(path),
+                        new ByteArrayInputStream(new byte[0]), probe.available());
+                if (path.endsWith(".gz")) response.addHeader("Content-Encoding", "gzip");
+            } catch (IOException e) {
+                response = newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Asset not found");
+            }
         } else {
             try {
                 response = newChunkedResponse(Response.Status.OK, mimeType(path), source.open(path));
