@@ -15,9 +15,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @RunWith(AndroidJUnit4.class)
 public class EngineSmokeTest {
     private static final String TAG = "PDFCraftSmoke";
-    /** Bundled Pyodide and LibreOffice runtimes are ~300 MB of WebAssembly, which a
-     *  software rendered emulator compiles far slower than a phone. */
-    private static final long ENGINE_TIMEOUT_MINUTES = 30;
+    /** Measured end to end on emulators: 46s on an API 35 tablet, 118s on an API 28
+     *  phone, where compiling the bundled LibreOffice WebAssembly dominates. This
+     *  leaves several times that headroom while keeping a hang cheap to discover. */
+    private static final long ENGINE_TIMEOUT_MINUTES = 8;
 
     @Test public void currentAppAndBundledEnginesProduceValidDocuments() throws Exception {
         CountDownLatch home = new CountDownLatch(1);
@@ -79,9 +80,11 @@ public class EngineSmokeTest {
             // separate short wait separates "never ran" from "still running".
             assertTrue("Engine smoke harness never reported a stage; the page or its module failed to load",
                     harness.await(4,TimeUnit.MINUTES));
+            // Await first: Java evaluates arguments before the call, so building
+            // the message inline would capture the stage as it was 30 minutes ago.
+            boolean finished = engines.await(ENGINE_TIMEOUT_MINUTES,TimeUnit.MINUTES);
             assertTrue("Engine smoke test timed out after "+ENGINE_TIMEOUT_MINUTES
-                            +" minutes, last stage: "+progress.get(),
-                    engines.await(ENGINE_TIMEOUT_MINUTES,TimeUnit.MINUTES));
+                    +" minutes, last stage: "+progress.get(), finished);
             assertTrue(result.get(),result.get().startsWith("PASS:"));
             assertTrue("Native Blob download was not delivered",exported.await(2,TimeUnit.MINUTES));
             assertEquals("%PDF-",download.get());

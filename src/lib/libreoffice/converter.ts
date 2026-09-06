@@ -36,6 +36,8 @@ const ASSET_VERSION = '20240212-4';
 // with correct Content-Encoding and MIME headers (required for WebAssembly streaming).
 const SOFFICE_WASM_FILE = 'soffice.wasm.bin';
 const SOFFICE_DATA_FILE = 'soffice.data.bin';
+/** Longest we wait for the worker's own teardown before cleaning up regardless. */
+const DESTROY_TIMEOUT_MS = 5000;
 
 function normalizeBasePath(path: string): string {
     return path.endsWith('/') ? path : `${path}/`;
@@ -348,16 +350,32 @@ export class LibreOfficeConverter {
     }
 
     async destroy(): Promise<void> {
-        if (this.converter) {
-            await this.converter.destroy();
+        const converter = this.converter;
+        // Mark the instance torn down before waiting, so a caller that gives up
+        // on this promise still sees a converter that needs re-initializing.
+        this.converter = null;
+        this.initialized = false;
+
+        if (converter) {
+            // The worker's own destroy can wait on a pthread that has already
+            // gone away, leaving its promise pending forever; on Android this
+            // hung indefinitely after a successful conversion. Teardown must
+            // never outlive the work it cleans up, so cap the wait and carry on
+            // with the cleanup we control.
+            try {
+                await Promise.race([
+                    converter.destroy(),
+                    new Promise<void>(resolve => setTimeout(resolve, DESTROY_TIMEOUT_MS)),
+                ]);
+            } catch {
+                // A worker that fails to shut down cleanly must not strand the
+                // Blob URLs below.
+            }
         }
-        
+
         // Revoke Blob URLs to release memory
         this.blobUrls.forEach(url => URL.revokeObjectURL(url));
         this.blobUrls = [];
-        
-        this.converter = null;
-        this.initialized = false;
     }
 }
 
