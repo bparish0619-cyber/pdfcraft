@@ -6,7 +6,9 @@ preserved.
 
 ## Added
 
-- Universal Android APK for phones/tablets running Android 8+.
+- Android APKs for phones/tablets running Android 8+, built one per ABI
+  (arm64-v8a, armeabi-v7a, x86_64) so an install does not carry two unusable
+  copies of the native browser engine.
 - Packaged current PDFCraft interface and tool processors, all generated locales,
   PDF.js, qpdf, Pyodide/PyMuPDF, Python wheels and LibreOffice WASM assets.
 - Bundled GeckoView and an isolated, read-only loopback asset server to support
@@ -25,8 +27,10 @@ The app packages the upstream capabilities; broad tool-by-tool physical-device
 parity is still a QA requirement. Complex files depend on available device memory.
 Optional remote fonts, OCR/DjVu downloads and tools using external URLs retain
 upstream network requirements. Default **PDFCraft QA** builds use a public test
-certificate and are not intended for secure public distribution. The APK is large
-because the processing engines are included. Updates are downloaded and installed
+certificate and are not intended for secure public distribution. The APKs are large
+because the processing engines are included; splitting by ABI removes the unusable
+engine copies but not the bundled web and WASM assets. Download only the APK
+matching your device's architecture. Updates are downloaded and installed
 manually; building is automatic.
 
 For setup, signing, sync behavior and the device QA checklist, see

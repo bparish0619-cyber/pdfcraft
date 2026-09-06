@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p device-results
-adb install -r "$(find test-apks -name app-debug.apk -print -quit)"
-adb install -r "$(find test-apks -name app-debug-androidTest.apk -print -quit)"
+# The app is built as one APK per ABI, so install the split the emulator can run.
+app="$(find test-apks -name '*x86_64*.apk' ! -name '*androidTest*' -print -quit)"
+test -n "$app" || app="$(find test-apks -name 'app-debug.apk' -print -quit)"
+test -n "$app" || { echo 'No debug APK found in test-apks:' >&2; find test-apks -type f >&2; exit 1; }
+tests="$(find test-apks -name '*x86_64*androidTest*.apk' -print -quit)"
+test -n "$tests" || tests="$(find test-apks -name '*androidTest*.apk' -print -quit)"
+test -n "$tests" || { echo 'No instrumentation APK found in test-apks:' >&2; find test-apks -type f >&2; exit 1; }
+adb install -r "$app"
+adb install -r "$tests"
 # Stream logcat to a file: a 12+ minute engine run overflows the on-device ring
 # buffer, which would drop exactly the early Gecko console output we need.
 adb logcat -c

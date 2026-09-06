@@ -8,11 +8,21 @@ insets and Back navigation.
 
 ## Install and update
 
-After **Android APK** passes on the default branch, download `PDFCraft-Android.apk`
-from the repository's **android-latest** prerelease. Allow installation from the
-browser/file manager when Android asks, then open the APK. The APK contains ARM64,
-ARMv7 and x86_64 engine libraries; there is no separate runtime installation.
-New successful builds replace the rolling APK. Download and install a later APK
+After **Android APK** passes on the default branch, download the APK for your
+device from the repository's **android-latest** prerelease. The build produces one
+APK per CPU architecture, so pick a single file:
+
+| APK | Device |
+| :-- | :-- |
+| `PDFCraft-Android-arm64-v8a.apk` | Any phone or tablet from roughly 2016 onward. Start here. |
+| `PDFCraft-Android-armeabi-v7a.apk` | Older 32-bit ARM devices only. |
+| `PDFCraft-Android-x86_64.apk` | Emulators, ChromeOS and x86 tablets. |
+
+`SHA256SUMS` in the same prerelease covers all three. Allow installation from the
+browser/file manager when Android asks, then open the APK; there is no separate
+runtime installation. Installing the wrong architecture fails with
+`INSTALL_FAILED_NO_MATCHING_ABIS` rather than installing a broken app.
+New successful builds replace the rolling APKs. Download and install a later APK
 to update; the app does not silently install updates itself.
 
 Without signing secrets, builds are labeled **PDFCraft QA**, use package
@@ -20,9 +30,12 @@ Without signing secrets, builds are labeled **PDFCraft QA**, use package
 Install them only from this fork's trusted release/Actions page. They are for
 review, not secure public distribution. See [signing details](signing/README.md).
 The APK is large because it bundles a browser engine, all locales, and the same
-LibreOffice/Pyodide/PDF assets as the web application: roughly 600 MB to download,
-plus the native engine libraries Android extracts at install time. Allow several GB
-of free space for installation and large document processing.
+LibreOffice/Pyodide/PDF assets as the web application. Per-ABI APKs remove the two
+GeckoView engine copies a given device cannot use, but only native libraries are
+split: each APK still carries the full ~357 MiB of web and WASM assets, which
+dominate the download. Each build's job summary records the exact APK sizes, and
+the asset/library split is printed per APK by `scripts/verify-apk.py`. Allow
+several GB of free space for installation and large document processing.
 
 ## Capabilities
 

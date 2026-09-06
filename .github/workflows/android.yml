@@ -70,14 +70,32 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: ./android/gradlew -p android --no-daemon --warning-mode all :app:testDebugUnitTest :app:lintRelease :app:assembleRelease :app:assembleDebug :app:assembleDebugAndroidTest
-      - name: Verify APK signature and contents
+      - name: Verify APK signatures and contents
         run: |
+          shopt -s nullglob
+          find android/app/build/outputs/apk -name '*.apk' -printf '%10s  %p\n' | sort
           mkdir -p android-artifacts
-          cp android/app/build/outputs/apk/release/app-release.apk android-artifacts/PDFCraft-Android.apk
-          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs android-artifacts/PDFCraft-Android.apk
-          python3 android/scripts/verify-apk.py android-artifacts/PDFCraft-Android.apk
+          count=0
+          for apk in android/app/build/outputs/apk/release/*.apk; do
+            abi=''
+            for candidate in arm64-v8a armeabi-v7a x86_64; do
+              case "$(basename "$apk")" in *"$candidate"*) abi=$candidate ;; esac
+            done
+            test -n "$abi" || { echo "Cannot determine the ABI of $apk" >&2; exit 1; }
+            out="android-artifacts/PDFCraft-Android-$abi.apk"
+            cp "$apk" "$out"
+            "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs "$out"
+            python3 android/scripts/verify-apk.py "$out" "$abi"
+            count=$((count + 1))
+          done
+          test "$count" -eq 3
           cd android-artifacts
-          sha256sum PDFCraft-Android.apk > PDFCraft-Android.apk.sha256
+          sha256sum *.apk > SHA256SUMS
+          {
+            echo '| APK | Size |'
+            echo '| :-- | ---: |'
+            for apk in *.apk; do echo "| $apk | $(du -h "$apk" | cut -f1) |"; done
+          } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v6
         with:
           name: android-apk
@@ -88,8 +106,8 @@ jobs:
         with:
           name: android-test-apks
           path: |
-            android/app/build/outputs/apk/debug/app-debug.apk
-            android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            android/app/build/outputs/apk/debug/*x86_64*.apk
+            android/app/build/outputs/apk/androidTest/debug/*-androidTest.apk
           if-no-files-found: error
           compression-level: 0
       - uses: actions/upload-artifact@v6
