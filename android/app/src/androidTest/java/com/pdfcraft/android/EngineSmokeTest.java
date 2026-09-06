@@ -5,8 +5,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
+import android.app.Instrumentation;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import androidx.test.platform.app.InstrumentationRegistry;
 import org.mozilla.geckoview.*;
 import java.io.*;
 import java.util.concurrent.*;
@@ -86,8 +91,42 @@ public class EngineSmokeTest {
             assertTrue("Engine smoke test timed out after "+ENGINE_TIMEOUT_MINUTES
                     +" minutes, last stage: "+progress.get(), finished);
             assertTrue(result.get(),result.get().startsWith("PASS:"));
-            assertTrue("Native Blob download was not delivered",exported.await(2,TimeUnit.MINUTES));
+            // GeckoView hands a download to the app only for one a user asked for,
+            // so tap the harness's target rather than letting the script click it.
+            boolean delivered = false;
+            for (int attempt = 1; attempt <= 3 && !delivered; attempt++) {
+                Thread.sleep(1500);
+                tapCentreOfWebView(scenario);
+                delivered = exported.await(40,TimeUnit.SECONDS);
+                if (!delivered) Log.i(TAG, "no download after tap attempt " + attempt);
+            }
+            assertTrue("Native Blob download was not delivered after three taps",delivered);
             assertEquals("%PDF-",download.get());
         }
+    }
+
+    /** Sends a real touch through the input pipeline, which is what gives the page
+     *  the user activation a script-driven click cannot supply. */
+    private void tapCentreOfWebView(ActivityScenario<MainActivity> scenario) {
+        float[] point = new float[2];
+        scenario.onActivity(activity -> {
+            View view = ((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            point[0] = location[0] + view.getWidth() / 2f;
+            point[1] = location[1] + view.getHeight() / 2f;
+        });
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        long now = SystemClock.uptimeMillis();
+        MotionEvent down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, point[0], point[1], 0);
+        MotionEvent up = MotionEvent.obtain(now, now + 60, MotionEvent.ACTION_UP, point[0], point[1], 0);
+        try {
+            instrumentation.sendPointerSync(down);
+            instrumentation.sendPointerSync(up);
+        } finally {
+            down.recycle();
+            up.recycle();
+        }
+        Log.i(TAG, "tapped the download target at " + point[0] + "," + point[1]);
     }
 }

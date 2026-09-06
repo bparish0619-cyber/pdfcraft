@@ -12,9 +12,10 @@ const started = Date.now();
 // Titles are the only channel the instrumented test can observe, and logcat is
 // the only channel CI can read, so every stage goes to both. Elapsed seconds
 // turn a timeout into a report of which stage was still running.
+const log = document.body.appendChild(document.createElement("pre"));
 const report = (message) => {
   const line = `${message} [${((Date.now() - started) / 1000).toFixed(1)}s]`;
-  document.body.innerText += line + "\n";
+  log.textContent += line + "\n";
   document.title = line;
   console.log("PDFCraftSmoke " + line);
   window.__smokeAlive?.();
@@ -99,8 +100,18 @@ book=Workbook(); book.active['A1']='PDFCraft Android Excel test'; book.save('/sm
   const link = document.createElement("a");
   link.href = URL.createObjectURL(mergedBlob);
   link.download = "android-smoke.pdf";
+  link.textContent = "TAP TO DOWNLOAD";
+  // A script-driven click carries no user activation. The instrumented test taps
+  // this instead, so the download is requested exactly the way DownloadButton
+  // requests one for a real user. The listener records that the tap landed,
+  // which separates a missed tap from a download the engine never handed over.
+  Object.assign(link.style, {
+    position: "fixed", inset: "0", display: "flex", alignItems: "center",
+    justifyContent: "center", fontSize: "32px", background: "#fff",
+    zIndex: "2147483647", color: "#2563EB"
+  });
+  link.addEventListener("click", () => console.log("PDFCraftSmoke TAP: download anchor received the tap"));
   document.body.appendChild(link);
-  link.click();
   report("PASS: Android engines and PDF outputs");
 }
 run().catch((error) => {

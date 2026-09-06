@@ -33,8 +33,14 @@ echo "::endgroup::"
 # The filtered view above shows nothing when the failure is something Gecko never
 # routed to the console, such as a download that was never initiated, so also dump
 # the raw tail around the end of the run.
-echo "::group::Unfiltered logcat tail"
-tail -250 device-results/logcat.txt || true
-echo "::endgroup::"
+# The tail of the log is teardown noise, because the test waits minutes after the
+# last stage. Print the window starting at the last harness stage instead, which
+# is where whatever went wrong actually happened.
+marker=$(grep -an 'PDFCraftSmoke' device-results/logcat.txt | tail -1 | cut -d: -f1 || true)
+if [ -n "${marker:-}" ]; then
+  echo "::group::Unfiltered logcat from the last harness stage onward"
+  sed -n "${marker},$((marker + 300))p" device-results/logcat.txt || true
+  echo "::endgroup::"
+fi
 echo "Instrumentation did not report a passing run (am instrument status ${status})." >&2
 exit 1
