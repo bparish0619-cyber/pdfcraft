@@ -63,7 +63,7 @@ workflow can guarantee compatibility with unknown future changes.
 
 ## Build locally
 
-Install Node 22, JDK 17 and Android SDK platform 35/build-tools 35.0.0, and set
+Install Node 22, JDK 17 and Android SDK platform 37/build-tools 36.0.0, and set
 `ANDROID_HOME` (or `android/local.properties` with `sdk.dir=...`). From repo root:
 
 ```sh
@@ -80,8 +80,8 @@ Use direct `next build` here: the existing `npm run build` postbuild chunks larg
 assets for Cloudflare; Android requires the complete engines. Preparation fails
 if essential assets are missing. Original assets are not modified or removed.
 
-Pinned native toolchain: AGP 8.9.2, Gradle 8.11.1 (checksum verified), SDK/build-tools
-35/35.0.0, GeckoView 155.0.20260903215306, AndroidX Activity 1.10.1, NanoHTTPD 2.3.1.
+Pinned native toolchain: AGP 9.3.2, Gradle 9.5.0 (checksum verified), SDK/build-tools
+37/36.0.0, GeckoView 155.0.20260903215306, AndroidX Activity 1.10.1, NanoHTTPD 2.3.1.
 The repository's npm lockfile governs web dependencies. GeckoView must be updated
 periodically for browser security fixes; it does not update via System WebView.
 GeckoView is MPL-2.0 and NanoHTTPD BSD-3-Clause; the existing project license still

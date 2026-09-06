@@ -39,7 +39,7 @@ jobs:
       - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
       - name: Install pinned Android SDK packages
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'platform-tools'
+        run: sdkmanager 'platforms;android-37' 'build-tools;36.0.0' 'platform-tools'
       - name: Install locked web dependencies and prepare engines
         run: npm ci --no-audit --no-fund
       - name: Build current web application and package assets
@@ -70,7 +70,7 @@ jobs:
         run: |
           mkdir -p android-artifacts
           cp android/app/build/outputs/apk/release/app-release.apk android-artifacts/PDFCraft-Android.apk
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs android-artifacts/PDFCraft-Android.apk
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs android-artifacts/PDFCraft-Android.apk
           python3 android/scripts/verify-apk.py android-artifacts/PDFCraft-Android.apk
           cd android-artifacts
           sha256sum PDFCraft-Android.apk > PDFCraft-Android.apk.sha256

@@ -3,8 +3,8 @@ plugins { id 'com.android.application' }
 def privateKey = System.getenv('ANDROID_KEYSTORE_PATH')
 android {
     namespace 'com.pdfcraft.android'
-    compileSdk 35
-    buildToolsVersion '35.0.0'
+    compileSdk 37
+    buildToolsVersion '36.0.0'
     defaultConfig {
         applicationId 'com.pdfcraft.android'
         minSdk 26
@@ -48,6 +48,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -56,6 +57,7 @@ android {
     lint { abortOnError true }
 }
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation 'org.mozilla.geckoview:geckoview:155.0.20260903215306'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation 'androidx.activity:activity:1.10.1'
