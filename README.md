@@ -388,3 +388,24 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE)
 <div align="center">
   Built with ❤️ by the PDFCraft Team
 </div>
+
+## Android application (phones and tablets)
+
+This fork adds a packaged Android APK while retaining all existing web and Tauri
+desktop files. The APK includes PDFCraft's current interface and PDF processing
+engines, including LibreOffice, Pyodide/PyMuPDF, PDF.js and qpdf. It uses bundled
+GeckoView to support the shared-memory workers needed for Office conversions,
+with native Android file selection/saving and responsive phone/tablet layouts.
+Android 8.0+ is required.
+
+**Download:** open this repository's **Releases → android-latest** after the
+**Android APK** workflow passes, or use the `android-apk` artifact from a build.
+The default installable build is **PDFCraft QA**; private release signing is
+optional. Normal **Sync fork → Update branch** pushes to `main`/`master` rebuild
+and test the APK automatically. Keep the Android additions when merging upstream.
+
+See [Android installation, capabilities and QA](android/README.md) and
+[Android release notes](android/RELEASE_NOTES.md). Representative engine tests
+include PDF merge/split/rendering and DOCX/XLSX/PPTX conversion; full physical-device
+QA is still required. Upstream network-dependent resources retain their internet
+requirements, and large documents depend on device memory.

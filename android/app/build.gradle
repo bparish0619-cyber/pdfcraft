@@ -1,0 +1,82 @@
+plugins { id 'com.android.application' }
+
+def privateKey = System.getenv('ANDROID_KEYSTORE_PATH')
+android {
+    namespace = 'com.pdfcraft.android'
+    compileSdk = 36
+    buildToolsVersion = '36.0.0'
+    defaultConfig {
+        applicationId = 'com.pdfcraft.android'
+        minSdk = 26
+        targetSdk = 35
+        versionCode = Integer.parseInt(System.getenv('ANDROID_VERSION_CODE') ?: '1')
+        versionName = System.getenv('ANDROID_VERSION_NAME') ?: '0.1.0-android'
+        testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    signingConfigs {
+        qa {
+            storeFile = file('../signing/qa.keystore')
+            storePassword = 'android'
+            keyAlias = 'androiddebugkey'
+            keyPassword = 'android'
+        }
+        if (privateKey) {
+            privateRelease {
+                storeFile = file(privateKey)
+                storePassword = System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias = System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword = System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix = '.qa'
+            signingConfig = signingConfigs.qa
+            resValue 'string', 'app_name', 'PDFCraft QA'
+        }
+        release {
+            if (privateKey) {
+                signingConfig = signingConfigs.privateRelease
+                resValue 'string', 'app_name', 'PDFCraft'
+            } else {
+                applicationIdSuffix = '.qa'
+                signingConfig = signingConfigs.qa
+                resValue 'string', 'app_name', 'PDFCraft QA'
+            }
+            minifyEnabled = false
+        }
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    buildFeatures {
+        buildConfig = true
+        resValues = true
+    }
+    // One APK per ABI. A universal APK carries three copies of GeckoView's
+    // native engine, which no single device can use, so each install paid for
+    // two ABIs it discards. Assets are not split and still dominate each APK.
+    splits {
+        abi {
+            enable = true
+            reset()
+            include 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+            universalApk = false
+        }
+    }
+    packaging { jniLibs { useLegacyPackaging = true } }
+    lint { abortOnError = true }
+}
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation 'org.mozilla.geckoview:geckoview:152.0.20260713164047'
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'androidx.activity:activity:1.10.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}

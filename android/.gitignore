@@ -1,0 +1,9 @@
+.gradle/
+local.properties
+**/build/
+app/src/main/assets/
+*.apk
+*.aab
+*.jks
+
+app/src/debug/assets/web/
