@@ -30,5 +30,11 @@ echo "::group::Gecko console and smoke harness output"
 grep -aE 'PDFCraftSmoke|GeckoConsole|Isolated Web Content|LibreOffice|Gecko/|E AndroidRuntime|lowmemorykiller|Fatal signal' \
   device-results/logcat.txt | tail -400 || true
 echo "::endgroup::"
+# The filtered view above shows nothing when the failure is something Gecko never
+# routed to the console, such as a download that was never initiated, so also dump
+# the raw tail around the end of the run.
+echo "::group::Unfiltered logcat tail"
+tail -250 device-results/logcat.txt || true
+echo "::endgroup::"
 echo "Instrumentation did not report a passing run (am instrument status ${status})." >&2
 exit 1
