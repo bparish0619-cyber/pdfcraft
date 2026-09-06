@@ -20,8 +20,9 @@ Without signing secrets, builds are labeled **PDFCraft QA**, use package
 Install them only from this fork's trusted release/Actions page. They are for
 review, not secure public distribution. See [signing details](signing/README.md).
 The APK is large because it bundles a browser engine, all locales, and the same
-LibreOffice/Pyodide/PDF assets as the web application. Allow several GB of free
-space for installation and large document processing.
+LibreOffice/Pyodide/PDF assets as the web application: roughly 600 MB to download,
+plus the native engine libraries Android extracts at install time. Allow several GB
+of free space for installation and large document processing.
 
 ## Capabilities
 
@@ -110,6 +111,13 @@ phone and API 35 tablet emulator tests. Engine tests verify secure context,
 cross-origin isolation, SharedArrayBuffer across a worker, real PDF merge/split,
 PDF.js rendering/text extraction, PyMuPDF loading, DOCX/XLSX/PPTX → readable PDF,
 and delivery of an exported Blob to the native download callback.
+
+The engine tests run inside the app on a software-rendered emulator, where the
+bundled Pyodide and LibreOffice WebAssembly takes minutes to fetch and compile. The
+harness announces each stage through the page title, the instrumented test logs
+every stage under the `PDFCraftSmoke` tag, and `run-device-tests.sh` prints the
+matching Gecko console output when a run does not pass, so a stall names the stage
+it stalled in rather than reporting a bare timeout.
 
 These are representative regression tests, not an exhaustive certification of
 all PDFCraft tools. Before upstream submission, also QA on physical phone and
