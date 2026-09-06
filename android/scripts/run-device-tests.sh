@@ -25,8 +25,10 @@ if grep -Eq '^OK \([1-9][0-9]* tests?\)' device-results/instrumentation.txt; the
   exit 0
 fi
 echo "::group::Gecko console and smoke harness output"
-grep -aE 'PDFCraftSmoke|GeckoConsole|Gecko/|E AndroidRuntime|lowmemorykiller|Fatal signal' \
-  device-results/logcat.txt | tail -300 || true
+# Content-process console output is tagged "Isolated Web Content", not GeckoConsole,
+# so engine diagnostics such as the [LibreOffice] environment check land there.
+grep -aE 'PDFCraftSmoke|GeckoConsole|Isolated Web Content|LibreOffice|Gecko/|E AndroidRuntime|lowmemorykiller|Fatal signal' \
+  device-results/logcat.txt | tail -400 || true
 echo "::endgroup::"
 echo "Instrumentation did not report a passing run (am instrument status ${status})." >&2
 exit 1

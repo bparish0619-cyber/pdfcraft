@@ -105,5 +105,10 @@ book=Workbook(); book.active['A1']='PDFCraft Android Excel test'; book.save('/sm
 }
 run().catch((error) => {
   console.error(error);
-  report("FAIL: " + String(error?.stack || error));
+  // Firefox stacks start at the throw site and omit the message, so report both:
+  // checkEnvironment alone throws for isolation, a bad HTTP status and a failed
+  // fetch, and only the message says which.
+  const message = error && error.message ? error.message : String(error);
+  const stack = error && error.stack ? " | " + String(error.stack).split("\n")[0] : "";
+  report("FAIL: " + message.replace(/\s+/g, " ") + stack);
 });
