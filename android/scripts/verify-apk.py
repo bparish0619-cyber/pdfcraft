@@ -9,6 +9,7 @@ with zipfile.ZipFile(sys.argv[1]) as apk:
         assert f'assets/web/{asset}' in names, f'Missing bundled engine: {asset}'
     for abi in ('arm64-v8a', 'armeabi-v7a', 'x86_64'):
         assert f'lib/{abi}/libxul.so' in names, f'Missing GeckoView ABI: {abi}'
+    assert not any(name.startswith('assets/web/') and name.endswith('.gz') for name in names), 'Compressed web copies must not enter APK staging'
     assert 'classes.dex' in names
     assert not any('/android-smoke.' in name for name in names), 'Test harness leaked into release APK'
     print('Verified bundled engines and native ABIs. Source:', manifest['sourceCommit'])

@@ -78,7 +78,9 @@ Windows uses `android\gradlew.bat`. The APK is at
 `android/app/build/outputs/apk/release/app-release.apk`.
 Use direct `next build` here: the existing `npm run build` postbuild chunks large
 assets for Cloudflare; Android requires the complete engines. Preparation fails
-if essential assets are missing. Original assets are not modified or removed.
+if essential assets are missing. Original assets are not modified or removed. Compressed `.gz` copies are excluded
+from Android staging to prevent Android asset-merger collisions; the complete
+uncompressed engines are bundled.
 
 Pinned native toolchain: AGP 9.3.2, Gradle 9.5.0 (checksum verified), SDK/build-tools
 36/36.0.0, GeckoView 152.0.20260713164047, AndroidX Activity 1.10.1, NanoHTTPD 2.3.1.

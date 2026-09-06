@@ -3,6 +3,7 @@ import { MergePDFProcessor } from "../../src/lib/pdf/processors/merge";
 import { SplitPDFProcessor } from "../../src/lib/pdf/processors/split";
 import { LibreOfficeConverter } from "../../src/lib/libreoffice/converter";
 import { loadPyMuPDF } from "../../src/lib/pdf/pymupdf-loader";
+import { PDFToSlideProcessor } from "../../src/lib/pdf/processors/pdf-to-slide";
 import { loadPdfjs } from "../../src/lib/pdf/loader";
 const check = (value, message) => {
   if (!value) throw new Error(message);
@@ -55,16 +56,16 @@ async function run() {
   const py = pymupdf.pyodide;
   py.FS.writeFile("/smoke.pdf", new Uint8Array(await mergedBlob.arrayBuffer()));
   check(await py.runPythonAsync("import pymupdf\nd=pymupdf.open('/smoke.pdf')\nlen(d)") === 2, "PyMuPDF failed");
-  for (const wheel of ['python_docx-1.2.0-py3-none-any.whl','et_xmlfile-2.0.0-py3-none-any.whl','openpyxl-3.1.5-py2.py3-none-any.whl','pillow-11.2.1-cp313-cp313-pyodide_2025_0_wasm32.whl','python_pptx-1.0.2-py3-none-any.whl']) await py.loadPackage('/pymupdf-wasm/'+wheel);
+  for (const wheel of ['python_docx-1.2.0-py3-none-any.whl','et_xmlfile-2.0.0-py3-none-any.whl','openpyxl-3.1.5-py2.py3-none-any.whl']) await py.loadPackage('/pymupdf-wasm/'+wheel);
   await py.runPythonAsync(`
 from docx import Document
 from openpyxl import Workbook
-from pptx import Presentation
-from pptx.util import Inches
 doc=Document(); doc.add_paragraph('PDFCraft Android Word test'); doc.save('/smoke.docx')
 book=Workbook(); book.active['A1']='PDFCraft Android Excel test'; book.save('/smoke.xlsx')
-slides=Presentation(); slide=slides.slides.add_slide(slides.slide_layouts[5]); slide.shapes.title.text='PDFCraft Android PowerPoint test'; slides.save('/smoke.pptx')
 `);
+  const slideResult = await new PDFToSlideProcessor().process({files:[new File([mergedBlob], "slides.pdf")], options:{}});
+  check(slideResult.success && slideResult.result instanceof Blob, "PDF to PowerPoint failed");
+  py.FS.writeFile("/smoke.pptx", new Uint8Array(await slideResult.result.arrayBuffer()));
   const office = new LibreOfficeConverter();
   await office.initialize();
   try {
