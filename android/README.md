@@ -50,6 +50,14 @@ several GB of free space for installation and large document processing.
 - Android's document picker opens single or multiple local/cloud-provider files.
   Exported PDFs, archives, images and other results are streamed to temporary
   private storage, then saved to the location chosen in Android's save dialog.
+- Exports reach the app over the bundled loopback server rather than as browser
+  downloads. GeckoView never delivers a `blob:` download to
+  `ContentDelegate.onExternalResponse`, so every tool's download click reached
+  nothing and saving silently failed. `AndroidExportBridge` takes over any
+  `<a download>` click inside the shell and POSTs the bytes to a per-process
+  token endpoint, which streams them to the save dialog. The bytes are streamed
+  throughout, so a large export costs no extra memory. On the web the endpoint is
+  absent, discovery fails, and downloads behave exactly as they always have.
 - No broad storage permission is requested. Documents remain on the device unless
   the user selects an external destination or an upstream network-dependent tool.
 
@@ -124,6 +132,12 @@ phone and API 35 tablet emulator tests. Engine tests verify secure context,
 cross-origin isolation, SharedArrayBuffer across a worker, real PDF merge/split,
 PDF.js rendering/text extraction, PyMuPDF loading, DOCX/XLSX/PPTX → readable PDF,
 and delivery of an exported Blob to the native download callback.
+
+The engine tests also cover the export hand-off: the harness calls the same
+`handOffToAndroid` the app uses and the instrumented test takes the hand-off in
+place of the activity, asserting the filename, media type and that every byte
+arrived. `AssetServerTest` covers the endpoint itself, including that a guessed
+token is refused and that an unread body cannot desync the connection.
 
 The engine tests run inside the app on a software-rendered emulator, where the
 bundled Pyodide and LibreOffice WebAssembly takes minutes to fetch and compile. The

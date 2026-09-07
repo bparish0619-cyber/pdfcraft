@@ -5,6 +5,7 @@ import { LibreOfficeConverter } from "../../src/lib/libreoffice/converter";
 import { loadPyMuPDF } from "../../src/lib/pdf/pymupdf-loader";
 import { PDFToSlideProcessor } from "../../src/lib/pdf/processors/pdf-to-slide";
 import { loadPdfjs } from "../../src/lib/pdf/loader";
+import { handOffToAndroid } from "../../src/lib/android-bridge";
 const check = (value, message) => {
   if (!value) throw new Error(message);
 };
@@ -96,22 +97,12 @@ book=Workbook(); book.active['A1']='PDFCraft Android Excel test'; book.save('/sm
   } finally {
     await office.destroy();
   }
-  stage("native Blob download hand-off");
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(mergedBlob);
-  link.download = "android-smoke.pdf";
-  link.textContent = "TAP TO DOWNLOAD";
-  // A script-driven click carries no user activation. The instrumented test taps
-  // this instead, so the download is requested exactly the way DownloadButton
-  // requests one for a real user. The listener records that the tap landed,
-  // which separates a missed tap from a download the engine never handed over.
-  Object.assign(link.style, {
-    position: "fixed", inset: "0", display: "flex", alignItems: "center",
-    justifyContent: "center", fontSize: "32px", background: "#fff",
-    zIndex: "2147483647", color: "#2563EB"
-  });
-  link.addEventListener("click", () => console.log("PDFCraftSmoke TAP: download anchor received the tap"));
-  document.body.appendChild(link);
+  stage("native export hand-off to Android");
+  // Exercises the same path DownloadButton takes: GeckoView never delivers a blob:
+  // download to the app, so the shell receives the bytes over loopback instead.
+  const exported = new File([mergedBlob], "android-smoke.pdf", { type: "application/pdf" });
+  check(await handOffToAndroid(exported, exported.name),
+    "The Android shell did not accept the export hand-off");
   report("PASS: Android engines and PDF outputs");
 }
 run().catch((error) => {

@@ -116,6 +116,9 @@ public final class MainActivity extends ComponentActivity {
                         .setPositiveButton("Reopen", (d,w) -> recreate()).show();
             }
         });
+        // GeckoView never hands a blob: download to onExternalResponse, so the page
+        // posts its exports to the loopback server and they arrive here instead.
+        ((PdfCraftApplication) getApplication()).setExportSink(this::receiveExport);
         session.open(((PdfCraftApplication) getApplication()).runtime());
         view.setSession(session);
         session.loadUri(origin + "/");
@@ -160,6 +163,21 @@ public final class MainActivity extends ComponentActivity {
             }
         });
     }
+    /** Runs on a server thread: stage the bytes, then offer them to Android's picker. */
+    private void receiveExport(InputStream body, long length, String name, String mime) throws IOException {
+        File file = File.createTempFile("pdfcraft-export-", ".tmp", getCacheDir());
+        try {
+            try (OutputStream out = new FileOutputStream(file)) { copy(body, out); }
+        } catch (IOException e) {
+            file.delete();
+            throw e;
+        }
+        Download download = new Download(file, name, mime);
+        runOnUiThread(() -> {
+            if (isFinishing() || isDestroyed()) download.file().delete();
+            else { downloads.add(download); saveNext(); }
+        });
+    }
     private void saveNext() {
         if (saving != null || downloads.isEmpty() || isFinishing() || isDestroyed()) return;
         saving = downloads.remove();
@@ -176,6 +194,7 @@ public final class MainActivity extends ComponentActivity {
                 .setMessage(e.getMessage()).setPositiveButton("OK", null).show();
     }
     @Override protected void onDestroy() {
+        ((PdfCraftApplication) getApplication()).setExportSink(null);
         if (filePrompt != null && fileResult != null) fileResult.complete(filePrompt.dismiss());
         if (session != null) { view.releaseSession(); session.close(); }
         for (Download d : downloads) d.file().delete();

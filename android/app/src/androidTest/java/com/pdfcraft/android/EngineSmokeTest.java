@@ -5,13 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
-import android.app.Instrumentation;
-import android.os.SystemClock;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import androidx.test.platform.app.InstrumentationRegistry;
 import org.mozilla.geckoview.*;
 import java.io.*;
 import java.util.concurrent.*;
@@ -33,6 +28,7 @@ public class EngineSmokeTest {
         AtomicReference<String> result = new AtomicReference<>("No result");
         AtomicReference<String> progress = new AtomicReference<>("no progress reported");
         AtomicReference<String> download = new AtomicReference<>("No download");
+        AtomicReference<String> handedOff = new AtomicReference<>("nothing handed off");
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
                 GeckoView view = (GeckoView)((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
@@ -57,20 +53,23 @@ public class EngineSmokeTest {
                             result.set(title); engines.countDown();
                         }
                     }
-                    @Override public void onExternalResponse(GeckoSession s, WebResponse response) {
-                        new Thread(() -> {
-                            try (InputStream in=response.body; ByteArrayOutputStream out=new ByteArrayOutputStream()) {
-                                assertNotNull(in); MainActivity.copy(in,out);
-                                byte[] bytes=out.toByteArray();
-                                download.set(bytes.length > 100 ? new String(bytes,0,5,java.nio.charset.StandardCharsets.US_ASCII) : "too short");
-                            } catch (Throwable e) { download.set(e.toString()); }
-                            finally { exported.countDown(); }
-                        }).start();
-                    }
                     @Override public void onCrash(GeckoSession s) {
                         result.set("Gecko content process crashed after: " + progress.get());
                         engines.countDown();
                     }
+                });
+                // Take the hand-off in place of the activity, so the export is verified
+                // without Android's save dialog opening on top of the test.
+                ((PdfCraftApplication)activity.getApplication()).setExportSink((body, length, name, mime) -> {
+                    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                        MainActivity.copy(body, out);
+                        byte[] bytes = out.toByteArray();
+                        handedOff.set(name + "|" + mime + "|" + bytes.length + "|" + length);
+                        download.set(bytes.length > 100
+                                ? new String(bytes, 0, 5, java.nio.charset.StandardCharsets.US_ASCII)
+                                : "too short");
+                    } catch (Throwable e) { download.set(e.toString()); }
+                    finally { exported.countDown(); }
                 });
                 try { session.loadUri(((PdfCraftApplication)activity.getApplication()).origin()+"/en/"); }
                 catch(IOException e) { throw new RuntimeException(e); }
@@ -91,42 +90,15 @@ public class EngineSmokeTest {
             assertTrue("Engine smoke test timed out after "+ENGINE_TIMEOUT_MINUTES
                     +" minutes, last stage: "+progress.get(), finished);
             assertTrue(result.get(),result.get().startsWith("PASS:"));
-            // GeckoView hands a download to the app only for one a user asked for,
-            // so tap the harness's target rather than letting the script click it.
-            boolean delivered = false;
-            for (int attempt = 1; attempt <= 3 && !delivered; attempt++) {
-                Thread.sleep(1500);
-                tapCentreOfWebView(scenario);
-                delivered = exported.await(40,TimeUnit.SECONDS);
-                if (!delivered) Log.i(TAG, "no download after tap attempt " + attempt);
-            }
-            assertTrue("Native Blob download was not delivered after three taps",delivered);
+            // The harness reports PASS only after the hand-off resolves, so this is
+            // already done by now unless the bytes never arrived.
+            assertTrue("The export was never handed to Android",exported.await(1,TimeUnit.MINUTES));
+            String[] handOff = handedOff.get().split("\\|");
+            assertEquals("unexpected hand-off: "+handedOff.get(), 4, handOff.length);
+            assertEquals("the shell must be told what to call the file", "android-smoke.pdf", handOff[0]);
+            assertEquals("the shell must be told what the file is", "application/pdf", handOff[1]);
+            assertEquals("the whole body must reach the shell", handOff[3], handOff[2]);
             assertEquals("%PDF-",download.get());
         }
-    }
-
-    /** Sends a real touch through the input pipeline, which is what gives the page
-     *  the user activation a script-driven click cannot supply. */
-    private void tapCentreOfWebView(ActivityScenario<MainActivity> scenario) {
-        float[] point = new float[2];
-        scenario.onActivity(activity -> {
-            View view = ((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
-            int[] location = new int[2];
-            view.getLocationOnScreen(location);
-            point[0] = location[0] + view.getWidth() / 2f;
-            point[1] = location[1] + view.getHeight() / 2f;
-        });
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        long now = SystemClock.uptimeMillis();
-        MotionEvent down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, point[0], point[1], 0);
-        MotionEvent up = MotionEvent.obtain(now, now + 60, MotionEvent.ACTION_UP, point[0], point[1], 0);
-        try {
-            instrumentation.sendPointerSync(down);
-            instrumentation.sendPointerSync(up);
-        } finally {
-            down.recycle();
-            up.recycle();
-        }
-        Log.i(TAG, "tapped the download target at " + point[0] + "," + point[1]);
     }
 }

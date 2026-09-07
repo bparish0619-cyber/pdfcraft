@@ -11,8 +11,10 @@ preserved.
   copies of the native browser engine.
 - Packaged current PDFCraft interface and tool processors, all generated locales,
   PDF.js, qpdf, Pyodide/PyMuPDF, Python wheels and LibreOffice WASM assets.
-- Bundled GeckoView and an isolated, read-only loopback asset server to support
-  the shared-memory Office conversion engine.
+- Bundled GeckoView and an isolated loopback asset server to support the
+  shared-memory Office conversion engine. The server is read-only apart from one
+  token-guarded endpoint the page uses to hand an export to Android, which exists
+  because GeckoView does not deliver `blob:` downloads to the app.
 - Native single/multiple document selection, streamed file export with Android's
   save picker, Back navigation, screen/keyboard insets and responsive layout.
 - Automatic rebuilds after normal fork-sync pushes to main/master, manual builds,
