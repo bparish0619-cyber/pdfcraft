@@ -1,11 +1,9 @@
-import type { Metadata, Viewport } from 'next';
+import type { Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { AndroidExportBridge } from '@/components/AndroidExportBridge';
-import { getMessages, setRequestLocale, getTranslations } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { localeConfig, type Locale, locales } from '@/lib/i18n/config';
-import { generateHomeMetadata } from '@/lib/seo';
-import { fontVariables } from '@/lib/fonts';
+import { fontVariablesFor } from '@/lib/fonts';
 import { SkipLink } from '@/components/common/SkipLink';
 import '@/app/globals.css';
 
@@ -22,29 +20,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+    { media: '(prefers-color-scheme: light)', color: '#f4f3ec' },
+    { media: '(prefers-color-scheme: dark)', color: '#14161c' },
   ],
 };
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  // Validate locale
-  const validLocale = locales.includes(locale as Locale) ? (locale as Locale) : 'en';
-
-  // Get localized SEO translations
-  const t = await getTranslations({ locale: validLocale, namespace: 'metadata' });
-
-  // Generate metadata using the SEO module with translations
-  return generateHomeMetadata(validLocale, {
-    title: t('home.title'),
-    description: t('home.description'),
-  });
-}
 
 export default async function LocaleLayout({
   children,
@@ -71,9 +50,8 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <div lang={locale} dir={direction} className={`${fontVariables} min-h-screen bg-background text-foreground antialiased font-sans`}>
+      <div lang={locale} dir={direction} className={`${fontVariablesFor(direction)} min-h-screen bg-background text-foreground antialiased font-sans`}>
         <SkipLink targetId="main-content">Skip to main content</SkipLink>
-        <AndroidExportBridge />
         {children}
       </div>
     </NextIntlClientProvider>
