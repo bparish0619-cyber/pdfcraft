@@ -187,6 +187,22 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
             <Link href={`/${locale}/cookies`} className="text-xs text-[hsl(var(--color-muted-foreground))] hover:text-[hsl(var(--color-foreground))]">Cookies</Link>
           </div>
         </div>
+
+        {/* Northbrand lockup: this hosted copy is a Northbrand Collective
+            project. It sits below PDFCraft's own footer and credits,
+            which stay untouched above. The link uses the primary token,
+            which is Northbrand gold in both color schemes. */}
+        <div className="mt-8 text-center">
+          <p className="text-sm text-[hsl(var(--color-muted-foreground))]">
+            A Northbrand Collective project ·{' '}
+            <a
+              href="https://northbrand.net"
+              className="text-[hsl(var(--color-primary))] hover:underline"
+            >
+              northbrand.net
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
