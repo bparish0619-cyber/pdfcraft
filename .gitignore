@@ -9,6 +9,7 @@ public/pdfjs-viewer/pdf.worker.js
 public/pdfjs-viewer/pdf.sandbox.js
 public/pdfjs-viewer/pdf_viewer.js
 public/pdfjs-viewer/viewer.js
+public/pdfjs-viewer/pdfcraft_signature_scanner.js
 public/workers/pdf.worker.min.js
 
 # Build output
@@ -51,6 +52,7 @@ next-env.d.ts
 .vscode
 .agent
 .kiro
+.qoder
 *.swp
 *.swo
 *~
@@ -67,6 +69,7 @@ ehthumbs.db
 *.tmp
 *.temp
 .cache
+scratch/
 
 # Reference project (if not needed in repo)
 bentopdf-main
@@ -83,3 +86,10 @@ public/libreoffice-wasm/soffice.data.bin
 src-tauri/target/
 
 yarn.lock
+
+# AI / Agents & Knowledge graph
+.agents/
+graphify-out/
+
+docs/
+.scratch/

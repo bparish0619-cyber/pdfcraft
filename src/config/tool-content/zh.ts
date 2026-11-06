@@ -37,28 +37,29 @@ export const toolContentZh: Record<string, ToolContent> = {
   },
 
   'merge-pdf': {
-    title: '合并PDF',
-    metaDescription: '将多个PDF文件合并成一个文档。免费在线PDF合并器，支持拖放重新排序。',
-    keywords: ['合并pdf', '组合pdf', '连接pdf', 'pdf合并器', '拼接pdf'],
+    title: '合并 PDF 与多格式文件',
+    metaDescription: '将多个 PDF、图片（JPG/PNG/WebP）、Office 文档（Word/Excel/PPT）和文本文件快速合并为一个统一的 PDF 文档。免费在线文件合并器，支持拖拽排序与书签保留。',
+    keywords: ['合并pdf', '组合文件', '图片合并为pdf', 'word合并为pdf', 'pdf合并器', '拼接pdf', '多格式合并', 'combine files'],
     description: `
-      <p>合并PDF允许您快速轻松地将多个PDF文档合并成一个文件。无论您是整合报告、合并扫描文档还是组装演示文稿，这个工具都能使过程变得无缝。</p>
-      <p>只需上传文件，使用拖放功能按所需顺序排列，然后将它们合并成一个连贯的文档。该工具保留原始文件的质量，并可选择保留每个源文档的书签。</p>
-      <p>所有合并操作都在您的浏览器本地进行，确保敏感文档的完全隐私。</p>
+      <p>合并工具允许您快速轻松地将多个 PDF 文档、各类图片（JPG、PNG、WebP、BMP 等）、Office 文档（Word、Excel、PowerPoint）以及纯文本文件整合成一个连贯统一的 PDF 文件。无论是汇总商业报告、整合图文资料、合并扫描收据，还是组装汇报幻灯片，都能一站式搞定。</p>
+      <p>只需上传文件，使用拖放功能按所需顺序直观排列，系统会在本地自动将图片与文档转换为高质量 PDF 页面并无缝拼接。该工具完整保留原图画质，并可智能为每个子文件生成目录书签以便于查阅。</p>
+      <p>所有转换与合并操作均在您的浏览器本地沙箱中安全运行，无需上传第三方服务器，确保私密文档绝对安全。</p>
     `,
     howToUse: [
-      { step: 1, title: '上传PDF文件', description: '将多个PDF文件拖放到上传区域，或点击从设备中选择文件。' },
-      { step: 2, title: '排列顺序', description: '拖放文件缩略图以按所需顺序排列。' },
-      { step: 3, title: '合并并下载', description: '点击合并按钮组合所有文件，然后下载合并后的PDF。' },
+      { step: 1, title: '上传多种格式文件', description: '将 PDF、图片（JPG/PNG）、Office 文档（Word/Excel/PPT）或文本文件拖放到上传区域，支持混选添加。' },
+      { step: 2, title: '拖拽排列顺序', description: '通过拖放卡片调整文件先后顺序，图片文件支持实时缩略图预览。' },
+      { step: 3, title: '合并并下载 PDF', description: '点击合并按钮，系统会自动将所有内容转换为页面并组合成单一 PDF，即可立即下载。' },
     ],
     useCases: [
-      { title: '合并报告', description: '将月度或季度报告合并成一个年度文档，便于分发和存档。', icon: 'file-text' },
-      { title: '组装作品集', description: '将多个项目文档、证书或工作样本合并成专业作品集。', icon: 'briefcase' },
-      { title: '整合发票', description: '将多张发票或收据合并成一个文档，用于会计和记录保存。', icon: 'receipt' },
+      { title: '图文混排归档', description: '将 PDF 合同、身份证件图片、收据发票与说明文档一次性整合为一份完整的归档文件。', icon: 'briefcase' },
+      { title: '汇总多格式报告', description: '将 Word 分析报告、Excel 财务表格和 PPT 幻灯片一键拼接进同一个 PDF 便于呈阅。', icon: 'file-text' },
+      { title: '组装设计与作品集', description: '将多张设计效果图（JPG/PNG）与文字说明组合为高规格的作品集 PDF。', icon: 'image' },
     ],
     faq: [
-      { question: '可以合并多少个PDF？', answer: '您可以一次合并最多100个PDF文件，总大小最高可达500MB。' },
-      { question: '合并后的PDF会保持原始质量吗？', answer: '是的，合并过程保留所有文档的原始质量，不会进行任何压缩或质量损失。' },
-      { question: '可以合并受密码保护的PDF吗？', answer: '受密码保护的PDF需要先解密。请使用我们的解密PDF工具在合并前移除密码。' },
+      { question: '支持合并哪些类型的文件？', answer: '支持标准 PDF 文件、常见图片（JPG、PNG、WebP、BMP、SVG 等）、Office 文档（Word .docx/.doc、Excel .xlsx/.xls、PowerPoint .pptx/.ppt）以及纯文本（.txt、.md）。' },
+      { question: '可以合并多少个文件？', answer: '您可以一次合并最多 100 个文件，总大小最高可达 500MB。' },
+      { question: '非 PDF 文件合并后的质量如何？', answer: '系统会按自适应页面和原始高分辨率渲染图片和文档，不进行破坏性压缩，确保打印与阅读清晰度。' },
+      { question: '可以合并受密码保护的 PDF 吗？', answer: '受密码保护的 PDF 需要先解密。请使用我们的解密 PDF 工具在合并前移除密码。' },
     ],
   },
 
@@ -171,28 +172,28 @@ export const toolContentZh: Record<string, ToolContent> = {
 
   'edit-pdf': {
     title: '编辑PDF',
-    metaDescription: '在线编辑PDF文件。添加文本、图像、注释、高亮和形状到您的文档。',
-    keywords: ['编辑pdf', 'pdf编辑器', '注释pdf', '添加文本到pdf', 'pdf标记'],
+    metaDescription: '在线直接编辑PDF正文文本与图像。支持点击段落原位修改、实时自动排版折行，同时保留经典批注与高亮标记。',
+    keywords: ['编辑pdf', 'pdf文本编辑', '原位修改pdf', 'pdf直接编辑', 'pdf修改文字', 'pdf正文修改', 'pdf编辑器'],
     description: `
-      <p>编辑PDF提供一套全面的工具来修改和注释您的PDF文档。添加文本、图像、形状、高亮、评论等，无需昂贵的桌面软件。</p>
-      <p>直观的编辑器界面使您可以轻松标记文档以供审阅、添加协作注释、编辑敏感信息或用额外内容增强文档。</p>
-      <p>所有编辑都在您的浏览器本地进行，确保敏感文档的完全隐私。</p>
+      <p>全新的直接编辑模式采用先进的 PDFium 原生引擎，支持像 Word 一样直接点击 PDF 正文段落进行原位编辑与文字修改，并具备实时智能折行（Live Reflow）排版能力。</p>
+      <p>同时提供右侧属性控制坞（文本字号、颜色、行高、对齐方式）、图片原位替换与翻转，以及全文档批量查找替换功能。如需签名或标注审阅，也可随时一键切换至经典批注模式。</p>
+      <p>全流程纯本地客户端安全处理，无需上传云端服务器，保障您的文档隐私与安全。</p>
     `,
     howToUse: [
-      { step: 1, title: '上传PDF文件', description: '拖放您的PDF文件或点击选择要编辑的文档。' },
-      { step: 2, title: '选择编辑工具', description: '从工具栏中选择：文本、高亮、形状、图像、评论或编辑工具。' },
-      { step: 3, title: '进行编辑', description: '点击文档添加注释，拖动定位元素，使用属性面板进行自定义。' },
-      { step: 4, title: '保存并下载', description: '点击保存应用更改并下载编辑后的PDF。' },
+      { step: 1, title: '上传PDF文件', description: '拖放或选择需要编辑正文的 PDF 文件。' },
+      { step: 2, title: '原位点击修改正文', description: '直接点击或双击 PDF 上的文字段落即可光标输入修改，支持实时智能换行。' },
+      { step: 3, title: '样式调节与图像编辑', description: '在右侧检查器调整字体样式、段落对齐，或右键点击图片进行替换、翻转。' },
+      { step: 4, title: '保存并下载', description: '点击右上方“保存修改”按钮，即可导出完美保持原始排版的新 PDF。' },
     ],
     useCases: [
-      { title: '文档审阅', description: '为协作审阅过程添加评论、高亮和标记到文档。', icon: 'message-square' },
-      { title: '表单填写', description: '填写文本字段、添加签名并完成PDF表单，无需打印。', icon: 'edit-3' },
-      { title: '内容编辑', description: '在共享前永久删除文档中的敏感信息。', icon: 'eye-off' },
+      { title: '直接修改正文错误', description: '无需重新导出源文件，直接在 PDF 原位更正错别字、日期或金额。', icon: 'edit-3' },
+      { title: '全文档查找替换', description: '跨页面批量查找关键词并一键原位替换，大幅提升合同修改效率。', icon: 'search' },
+      { title: '图片替换与排版', description: '一键替换 PDF 中的老旧图片、印章或 Logo，保持版面规范整齐。', icon: 'image' },
     ],
     faq: [
-      { question: '可以编辑PDF中的原始文本吗？', answer: '此工具专注于添加注释和新内容。要编辑现有文本，您可能需要使用原始源文档。' },
-      { question: '我的编辑是永久的吗？', answer: '注释可以扁平化使其永久，或根据您的偏好保持为可编辑图层。' },
-      { question: '可以撤销更改吗？', answer: '是的，编辑器支持撤销/重做功能。您也可以在保存前随时重置为原始文档。' },
+      { question: '可以直接修改PDF现有的文字吗？', answer: '是的！本工具现已全面支持原位正文直接编辑。点击任意正文段落即可直接光标输入编辑，系统会自动计算字距并进行实时排版重排。' },
+      { question: '如何进行经典的批注与签名？', answer: '您可以随时点击编辑器顶部的“模式切换”药丸按钮，无缝切换到经典批注模式添加画笔、图章、形状与文本框。' },
+      { question: '我的文件安全吗？', answer: '非常安全。所有核心解析、文本重排和 PDF 保存均在您的浏览器本地 WASM 引擎中运行，文档不会上传至任何远程服务器。' },
     ],
   },
 
@@ -233,7 +234,7 @@ export const toolContentZh: Record<string, ToolContent> = {
     `,
     howToUse: [
       { step: 1, title: '上传PDF文件', description: '拖放您的PDF文件或点击选择需要签名的文档。' },
-      { step: 2, title: '创建签名', description: '用鼠标或触摸绘制签名，输入姓名生成签名，或上传签名图像。' },
+      { step: 2, title: '创建签名', description: '用鼠标或触摸绘制签名，输入姓名生成签名，或上传签名图像。也可以扫描写在纸上的签名照片。' },
       { step: 3, title: '放置和调整', description: '点击文档放置签名，然后拖动定位和调整大小。' },
       { step: 4, title: '保存并下载', description: '点击保存应用签名并下载已签名的PDF。' },
     ],
@@ -2184,6 +2185,33 @@ export const toolContentZh: Record<string, ToolContent> = {
       { question: '可以遮盖图像或扫描文本吗？', answer: '此工具适用于基于文本的PDF。对于扫描文档，您需要使用基于区域的手动遮盖。' },
       { question: '可以自定义遮盖外观吗？', answer: '是的，您可以设置遮盖颜色、添加边框，并可选择包含替换文本如"[已遮盖]"。' },
       { question: '正则表达式搜索如何工作？', answer: '启用"使用正则表达式"以使用正则模式搜索。例如，\\d{4}-\\d{4}-\\d{4}-\\d{4}可查找信用卡号。' },
+    ],
+  },
+  'redact-pdf': {
+    title: 'PDF 涂黑与马赛克脱敏',
+    metaDescription: '可视化对 PDF 进行抹黑遮盖、马赛克打码或高斯模糊。物理像素级不可逆销毁与深度元数据清理，100% 本地离线保障隐私安全。',
+    keywords: ['PDF脱敏', 'PDF抹黑', 'PDF打码', 'PDF马赛克', 'PDF隐私保护', 'PDF涂黑', '安全PDF编辑器'],
+    description: `
+      <p>PDF 涂黑与马赛克脱敏工具为您提供直观的可视化交互编辑能力，帮助您永久遮蔽并清除文档中的各类隐私与涉密信息。只需使用鼠标拖拽框选敏感内容（如身份证号、姓名、住址、公章、签名、财务流水、证件照等），即可应用纯黑遮蔽、白条遮盖、马赛克或高斯模糊效果。</p>
+      <p>与仅在文字上方覆盖矢量矩形的常规工具不同，本工具采用<strong>物理像素级不可逆固化与栅格化技术</strong>，将遮蔽区域直接融合烧录进页面，彻底销毁底层的文字对象、矢量路径与 OCR 文本流，任何人均无法通过复制、文本提取或反编译逆向还原原始内容。</p>
+      <p>同时，工具提供深度元数据清理功能，彻底抹除作者、软件历史指纹与 XMP 扩展流。所有运算均在您的浏览器本地内存中完成，零文件上传，全面满足企业与法务的严苛合规要求。</p>
+    `,
+    howToUse: [
+      { step: 1, title: '上传 PDF 文档', description: '拖拽或点击选择需要进行隐私脱敏的 PDF 文件。' },
+      { step: 2, title: '框选敏感区域', description: '在页面上按住鼠标左键拖拽画出需要遮蔽的区域，支持拖拽手柄缩放调整与移动。' },
+      { step: 3, title: '选择脱敏效果', description: '选择涂黑遮蔽、白条遮盖、马赛克打码（可调颗粒度）或高斯模糊，可随时开启实时预览验证效果。' },
+      { step: 4, title: '生成并下载安全文档', description: '点击“生成脱敏安全 PDF”，系统自动完成物理像素固化与元数据深度清理，即可一键下载。' },
+    ],
+    useCases: [
+      { title: '法规合规与隐私保护', description: '对身份证号、手机号、人脸肖像等敏感个人信息 (PII) 进行合规脱敏，满足数据保护法规。', icon: 'shield' },
+      { title: '涉密与法务公文披露', description: '在向外部共享合同、法务文书或调查报告前，对商业机密、签名公章与调解条款进行永久遮蔽。', icon: 'file-text' },
+      { title: '财务凭证与票据分享', description: '对银行回单、薪资表、发票流水等财务单据中的敏感账号与金额进行安全打码。', icon: 'lock' },
+    ],
+    faq: [
+      { question: '脱敏后的内容能否被复制或技术手段还原？', answer: '绝对无法还原。工具采用了物理不可逆像素栅格化技术，底层的文本图元已被彻底物理抹除，复制文本或使用反编译软件也无法提取任何底层信息。' },
+      { question: '涂黑遮蔽、马赛克与高斯模糊有什么区别？', answer: '涂黑为标准的公文涉密黑框（最严肃正规）；白条遮盖保持页面底色干净；马赛克具有现代化数码打码效果；高斯模糊则带来柔和的毛玻璃磨砂质感。' },
+      { question: '我的文件会被上传到云端服务器吗？', answer: '不会。整个渲染、打码、元数据清理和新文档生成过程 100% 运行在您本地浏览器的内存中，无任何网络上传请求。' },
+      { question: '系统会清理哪些文档元数据？', answer: '包括文档标题 (Title)、作者 (Author)、主题 (Subject)、关键词 (Keywords)、制作者 (Producer)、创建与修改时间，以及 XMP 扩展元数据流。' },
     ],
   },
   'decrypt-pdf': {

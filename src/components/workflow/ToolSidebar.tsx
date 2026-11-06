@@ -49,7 +49,7 @@ export function ToolSidebar({
 
     const [searchQuery, setSearchQuery] = useState('');
     const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-        new Set(['organize-manage', 'convert-to-pdf'])
+        new Set(['input', 'flow-control', 'organize-manage', 'convert-to-pdf', 'output'])
     );
     const pointerDragRef = useRef<PointerDragState | null>(null);
 
@@ -63,6 +63,24 @@ export function ToolSidebar({
 
     // Helper function to get tool name with fallback using getToolContent
     const getToolName = (toolId: string): string => {
+        if (toolId === 'pdf-input') {
+            return tWorkflow('pdfInput') || (locale === 'zh' ? 'PDF 输入源 (PDF Input)' : 'PDF Input');
+        }
+        if (toolId === 'image-input') {
+            return tWorkflow('imageInput') || (locale === 'zh' ? '图片输入源 (Image Input)' : 'Image Input');
+        }
+        if (toolId === 'file-input') {
+            return tWorkflow('fileInput') || (locale === 'zh' ? '通用文件输入 (File Input)' : 'File Input');
+        }
+        if (toolId === 'condition-gateway') {
+            return tWorkflow('conditionGateway') || (locale === 'zh' ? '条件分支 (Condition Gateway)' : 'Condition Gateway');
+        }
+        if (toolId === 'download-pdf') {
+            return tWorkflow('downloadPdf') || (locale === 'zh' ? '下载 PDF (Download PDF)' : 'Download PDF');
+        }
+        if (toolId === 'download-zip') {
+            return tWorkflow('downloadZip') || (locale === 'zh' ? '打包 ZIP 下载 (Download ZIP)' : 'Download ZIP');
+        }
         const content = getToolContent(locale, toolId);
         if (content && content.title) {
             return content.title;
@@ -73,6 +91,93 @@ export function ToolSidebar({
     // Group tools by category
     const categories: CategoryGroup[] = useMemo(() => {
         const categoryMap: Record<string, typeof tools> = {};
+
+        // Input source nodes (inspired by BentoPDF)
+        const inputTools: typeof tools = [
+            {
+                id: 'pdf-input',
+                slug: 'pdf-input',
+                icon: 'file-text',
+                category: 'input' as unknown as typeof tools[0]['category'],
+                acceptedFormats: ['.pdf'],
+                outputFormat: 'pdf',
+                maxFileSize: Infinity,
+                maxFiles: 100,
+                features: ['input', 'pdf-source'],
+                relatedTools: [],
+            },
+            {
+                id: 'image-input',
+                slug: 'image-input',
+                icon: 'images',
+                category: 'input' as unknown as typeof tools[0]['category'],
+                acceptedFormats: ['.jpg', '.jpeg', '.png', '.webp', '.bmp', '.tiff', '.tif', '.svg', '.heic'],
+                outputFormat: 'image',
+                maxFileSize: Infinity,
+                maxFiles: 100,
+                features: ['input', 'image-source'],
+                relatedTools: [],
+            },
+            {
+                id: 'file-input',
+                slug: 'file-input',
+                icon: 'folder-input',
+                category: 'input' as unknown as typeof tools[0]['category'],
+                acceptedFormats: ['*'],
+                outputFormat: '*',
+                maxFileSize: Infinity,
+                maxFiles: 100,
+                features: ['input', 'file-source'],
+                relatedTools: [],
+            },
+        ];
+        categoryMap['input'] = inputTools;
+
+        // Flow control gateway node
+        const flowControlTools: typeof tools = [
+            {
+                id: 'condition-gateway',
+                slug: 'condition-gateway',
+                icon: 'git-fork',
+                category: 'flow-control' as unknown as typeof tools[0]['category'],
+                acceptedFormats: ['*'],
+                outputFormat: '*',
+                maxFileSize: Infinity,
+                maxFiles: 100,
+                features: ['conditional-branching', 'file-count', 'file-size', 'file-format'],
+                relatedTools: [],
+            },
+        ];
+        categoryMap['flow-control'] = flowControlTools;
+
+        // Output and export terminal nodes
+        const outputTools: typeof tools = [
+            {
+                id: 'download-pdf',
+                slug: 'download-pdf',
+                icon: 'file-down',
+                category: 'output' as unknown as typeof tools[0]['category'],
+                acceptedFormats: ['.pdf'],
+                outputFormat: '.pdf',
+                maxFileSize: Infinity,
+                maxFiles: 100,
+                features: ['download', 'rename'],
+                relatedTools: [],
+            },
+            {
+                id: 'download-zip',
+                slug: 'download-zip',
+                icon: 'archive',
+                category: 'output' as unknown as typeof tools[0]['category'],
+                acceptedFormats: ['*'],
+                outputFormat: '.zip',
+                maxFileSize: Infinity,
+                maxFiles: 100,
+                features: ['zip', 'archive'],
+                relatedTools: [],
+            },
+        ];
+        categoryMap['output'] = outputTools;
 
         // Tools that require interactive UI and should be excluded from workflow
         const interactiveToolsBlacklist = new Set([
@@ -91,9 +196,6 @@ export function ToolSidebar({
             'edit-attachments',  // Attachment management interaction required
             'page-dimensions',   // Analysis only, no PDF output
             'validate-signature', // Read-only signature verification, no PDF output
-            'pdf-to-docx',       // Workflow executor not yet implemented
-            'pdf-to-pptx',       // Workflow executor not yet implemented
-            'pdf-to-excel',      // Workflow executor not yet implemented
         ]);
 
         tools
@@ -106,30 +208,39 @@ export function ToolSidebar({
             });
 
         const categoryOrder = [
+            'input',
+            'flow-control',
             'organize-manage',
             'edit-annotate',
             'convert-to-pdf',
             'convert-from-pdf',
             'optimize-repair',
             'secure-pdf',
+            'output',
         ];
 
         const categoryNames: Record<string, string> = {
-            'organize-manage': 'Organize & Manage',
-            'edit-annotate': 'Edit & Annotate',
-            'convert-to-pdf': 'Convert to PDF',
-            'convert-from-pdf': 'Convert from PDF',
-            'optimize-repair': 'Optimize & Repair',
-            'secure-pdf': 'Security & Privacy',
+            'input': tWorkflow('inputCategory') || (locale === 'zh' ? '输入源' : 'Input Sources'),
+            'flow-control': tWorkflow('flowControl') || (locale === 'zh' ? '流程控制' : 'Flow Control'),
+            'organize-manage': locale === 'zh' ? '文档组织' : 'Organize & Manage',
+            'edit-annotate': locale === 'zh' ? '编辑与标注' : 'Edit & Annotate',
+            'convert-to-pdf': locale === 'zh' ? '转换为 PDF' : 'Convert to PDF',
+            'convert-from-pdf': locale === 'zh' ? '从 PDF 导出' : 'Convert from PDF',
+            'optimize-repair': locale === 'zh' ? '压缩与优化' : 'Optimize & Repair',
+            'secure-pdf': locale === 'zh' ? '安全与隐私' : 'Security & Privacy',
+            'output': tWorkflow('outputCategory') || (locale === 'zh' ? '输出与交付' : 'Output & Export'),
         };
 
         const categoryIcons: Record<string, string> = {
+            'input': 'upload',
+            'flow-control': 'git-fork',
             'organize-manage': 'files',
             'edit-annotate': 'pencil',
             'convert-to-pdf': 'file-up',
             'convert-from-pdf': 'file-down',
             'optimize-repair': 'zap',
             'secure-pdf': 'shield',
+            'output': 'download',
         };
 
         return categoryOrder
@@ -140,7 +251,7 @@ export function ToolSidebar({
                 icon: categoryIcons[cat],
                 tools: categoryMap[cat],
             }));
-    }, []);
+    }, [locale]);
 
     // Filter tools based on search query
     const filteredCategories = useMemo(() => {
@@ -174,6 +285,8 @@ export function ToolSidebar({
     };
 
     const handleDragStart = (e: React.DragEvent, tool: typeof tools[0]) => {
+        // Cancel pointer fallback drag since native HTML5 drag-and-drop has taken over
+        pointerDragRef.current = null;
         onDragStart(e, createNodeData(tool));
     };
 
@@ -186,6 +299,16 @@ export function ToolSidebar({
         outputFormat: tool.outputFormat,
         status: 'idle',
         progress: 0,
+        settings: tool.id === 'condition-gateway' ? {
+            conditionType: 'file-count',
+            operator: 'greater-than',
+            value: 1,
+            sizeUnit: 'MB',
+        } : tool.id === 'download-pdf' ? {
+            filename: 'output.pdf',
+        } : tool.id === 'download-zip' ? {
+            filename: 'output.zip',
+        } : {},
     });
 
     const handlePointerDown = (e: React.PointerEvent, tool: typeof tools[0]) => {

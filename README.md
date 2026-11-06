@@ -13,6 +13,7 @@
 
 <div align="center">
 
+[![LibrePDF Desktop](https://img.shields.io/badge/Desktop_App-LibrePDF-2563eb?style=flat-square&logo=github)](https://github.com/PDFCraftTool/LibrePDF)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fpdfcraft.devtoolcafe.com%2Fen%2F)](https://pdfcraft.devtoolcafe.com/en/)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
@@ -20,6 +21,14 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwindcss)
 
 </div>
+
+> [!TIP]
+> ### 🚀 Discover LibrePDF — Private Desktop PDF Suite
+> Looking for a cross-platform desktop application with zero network telemetry? Check out our sister project:  
+> **[PDFCraftTool/LibrePDF](https://github.com/PDFCraftTool/LibrePDF)**: Open-source, zero-telemetry desktop PDF suite with 53+ tools, direct in-place text editing, offline Ollama AI Copilot, and node-based DAG workflows. A private, subscription-free Acrobat & Stirling-PDF desktop alternative.
+> 
+> * 🔗 **Project Repository**: [https://github.com/PDFCraftTool/LibrePDF](https://github.com/PDFCraftTool/LibrePDF)
+> * ⚖️ **Open-Source License**: [Apache-2.0 License](https://github.com/PDFCraftTool/LibrePDF/blob/main/LICENSE)
 
 ## 📖 About
 
@@ -34,6 +43,19 @@ This project is built with modern web technologies to provide a slick, app-like 
 - **🛠️ Comprehensive Toolset**: Over 80+ tools to handle any PDF task.
 - **🎨 Modern UI**: Clean, accessible, and responsive design built with Tailwind CSS.
 - **🌐 Multi-language**: Supports English, Spanish, French, German, Portuguese, Japanese, Korean, and Chinese.
+
+### Rotating PDFs
+
+Standard right-angle rotations preserve the original document's editable form fields, bookmarks, internal page links, custom page labels, attachments, and title/author metadata. This applies to all-page and selected-page rotations, including pages that already have a rotation. Arbitrary-angle rotation continues to rebuild page content through embedding and does not provide the same preservation guarantees.
+### Editing bookmark destinations
+
+Editing titles or reorganizing existing local page bookmarks preserves their original position, zoom and fit mode, including named destinations. Changing a bookmark's target page explicitly resets its view to the top of the new page. New bookmarks retain the existing page-top default.
+### Editing metadata
+
+Metadata edits preserve fields that were not selected for an update. Disabling automatic modification-date updates retains the existing date; explicitly supplied dates and producer information still take precedence.
+### PDF ZIP archives
+
+The PDFs to ZIP tool keeps every selected document, including files with the same name from different folders. Duplicate names receive a numeric suffix before the extension (for example, `report.pdf` and `report (2).pdf`). Existing input names are reserved, so an original `report (2).pdf` is not overwritten by an automatically renamed file. PDF contents are not modified.
 
 ## 🔄 Workflow Editor (Beta)
 
@@ -104,7 +126,7 @@ Navigate to `/workflow` or click on "Workflow Editor" in the navigation menu.
 | Tool | Description |
 |------|-------------|
 | **Edit PDF** | Add text, images, annotations, highlights, and shapes |
-| **Sign PDF** | Draw, type, or upload electronic signatures |
+| **Sign PDF** | Draw, type, upload, or scan a photo of your handwritten signature |
 | **Crop PDF** | Trim margins and remove unwanted areas |
 | **Edit Bookmarks** | Add, edit, and manage PDF navigation bookmarks |
 | **Table of Contents** | Generate clickable table of contents from bookmarks |
@@ -389,23 +411,8 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE)
   Built with ❤️ by the PDFCraft Team
 </div>
 
-## Android application (phones and tablets)
+### Organize several bookmarks
 
-This fork adds a packaged Android APK while retaining all existing web and Tauri
-desktop files. The APK includes PDFCraft's current interface and PDF processing
-engines, including LibreOffice, Pyodide/PyMuPDF, PDF.js and qpdf. It uses bundled
-GeckoView to support the shared-memory workers needed for Office conversions,
-with native Android file selection/saving and responsive phone/tablet layouts.
-Android 8.0+ is required.
-
-**Download:** open this repository's **Releases → android-latest** after the
-**Android APK** workflow passes, or use the `android-apk` artifact from a build.
-The default installable build is **PDFCraft QA**; private release signing is
-optional. Normal **Sync fork → Update branch** pushes to `main`/`master` rebuild
-and test the APK automatically. Keep the Android additions when merging upstream.
-
-See [Android installation, capabilities and QA](android/README.md) and
-[Android release notes](android/RELEASE_NOTES.md). Representative engine tests
-include PDF merge/split/rendering and DOCX/XLSX/PPTX conversion; full physical-device
-QA is still required. Upstream network-dependent resources retain their internet
-requirements, and large documents depend on device memory.
+In the bookmark editor, use Shift+click for a visible range and Ctrl/Cmd+click (or checkboxes) to toggle individual bookmarks. Drag any selected row to move the selection in document order: the top/bottom of a target row inserts before/after it, while its middle nests the selection. Moving a parent carries its children once. Use **Move selected to top level** or the drop area below the tree to return a selection to the top level. Saving retains the hierarchy, page destinations, view positions and styles.
+In **Edit PDF**, hold **Shift** while dragging an image/object resize handle to preserve its original aspect ratio. Release Shift for free resizing. The opposite corner stays fixed.
+In the PDF reader, open **Tools → Right-to-left page order** to place the first page of a spread on the right. This works in vertical, page-by-page and wrapped scrolling without mirroring page contents or changing the interface language. The toggle is unavailable in horizontal scrolling, which retains its existing page order. The choice is remembered on this device when browser storage is available.

@@ -97,9 +97,16 @@ export {
 export {
   applyRedactions,
   validateRedactionAreas,
+  redactPDF,
+  renderRedactionAreaOnCanvas,
+  applyPixelate,
+  applyBlur,
+  applySolidFill,
   type RedactionArea,
   type RedactionOptions,
   type RedactionResult,
+  type RedactionStyle,
+  type RedactOptions,
 } from './redact';
 
 // Rotate processor
@@ -266,6 +273,8 @@ export {
   getFormFields,
   type FormFieldValue,
   type FormFillerOptions,
+  type FormFieldInfo,
+  type FormFieldType,
 } from './form-filler';
 
 // Form creator processor

@@ -40,27 +40,28 @@ export const toolContentEn: Record<string, ToolContent> = {
   },
 
   'merge-pdf': {
-    title: 'Merge PDF',
-    metaDescription: 'Combine multiple PDF files into one document. Free online PDF merger with drag-and-drop reordering.',
-    keywords: ['merge pdf', 'combine pdf', 'join pdf', 'pdf merger', 'concatenate pdf'],
+    title: 'Combine Files & Merge PDF',
+    metaDescription: 'Combine multiple PDF files, images (JPG/PNG), Office documents (Word/Excel/PPT), and text into one unified PDF document. Free online tool with drag-and-drop reordering.',
+    keywords: ['merge pdf', 'combine files', 'combine pdf', 'join pdf', 'images to pdf', 'word to pdf merge', 'pdf merger', 'concatenate pdf'],
     description: `
-      <p>Merge PDF allows you to combine multiple PDF documents into a single file quickly and easily. Whether you're consolidating reports, combining scanned documents, or assembling a presentation, this tool makes the process seamless.</p>
-      <p>Simply upload your files, arrange them in your desired order using drag-and-drop, and merge them into one cohesive document. The tool preserves the quality of your original files and can optionally maintain bookmarks from each source document.</p>
-      <p>All merging happens locally in your browser, ensuring complete privacy for your sensitive documents.</p>
+      <p>Combine Files allows you to merge multiple PDF documents, images (JPG, PNG, WebP, BMP), Office documents (Word, Excel, PowerPoint), and plain text into a single cohesive PDF file quickly and easily. Whether you're consolidating multi-format reports, combining scanned receipts, or assembling presentations, this tool makes the process seamless.</p>
+      <p>Simply upload your files, arrange them in your desired order using drag-and-drop, and merge them into one document. Non-PDF files are automatically converted to high-quality PDF pages on the fly, and bookmarks can optionally be maintained from each source file's name.</p>
+      <p>All conversions and merging happen locally in your browser sandbox, ensuring complete privacy for your sensitive documents without uploading to remote servers.</p>
     `,
     howToUse: [
-      { step: 1, title: 'Upload PDF Files', description: 'Drag and drop multiple PDF files into the upload area, or click to select files from your device.' },
-      { step: 2, title: 'Arrange Order', description: 'Drag and drop the file thumbnails to arrange them in your desired order.' },
-      { step: 3, title: 'Merge and Download', description: 'Click the Merge button to combine all files, then download your merged PDF.' },
+      { step: 1, title: 'Upload Files', description: 'Drag and drop PDFs, images (JPG/PNG), Office documents (Word/Excel/PPT), or text files into the upload area.' },
+      { step: 2, title: 'Arrange Order', description: 'Drag and drop the file cards to arrange them in your desired order. Live thumbnails are previewed for images.' },
+      { step: 3, title: 'Merge and Download', description: 'Click the Merge button to automatically convert and combine all files into a single PDF, then download your result.' },
     ],
     useCases: [
-      { title: 'Combine Reports', description: 'Merge monthly or quarterly reports into a single annual document for easier distribution and archiving.', icon: 'file-text' },
-      { title: 'Assemble Portfolios', description: 'Combine multiple project documents, certificates, or work samples into a professional portfolio.', icon: 'briefcase' },
-      { title: 'Consolidate Invoices', description: 'Merge multiple invoices or receipts into one document for accounting and record-keeping purposes.', icon: 'receipt' },
+      { title: 'Mixed-Media Archiving', description: 'Combine contracts, identification photos, invoice receipts, and memo notes into a complete archive dossier.', icon: 'briefcase' },
+      { title: 'Consolidate Business Reports', description: 'Merge Word analyses, Excel financial tables, and PowerPoint presentation slides into one report deck.', icon: 'file-text' },
+      { title: 'Assemble Portfolios', description: 'Combine multiple design graphics (JPG/PNG) and textual descriptions into a polished professional portfolio.', icon: 'image' },
     ],
     faq: [
-      { question: 'How many PDFs can I merge?', answer: 'You can merge up to 100 PDF files at once, with a total combined size of up to 500MB.' },
-      { question: 'Will the merged PDF maintain the original quality?', answer: 'Yes, the merging process preserves the original quality of all documents without any compression or quality loss.' },
+      { question: 'What file formats can I combine?', answer: 'You can combine standard PDF files, images (JPG, PNG, WebP, BMP, SVG), Office documents (Word .docx/.doc, Excel .xlsx/.xls, PowerPoint .pptx/.ppt), and text files (.txt, .md).' },
+      { question: 'How many files can I merge at once?', answer: 'You can merge up to 100 files at once, with a total combined size of up to 500MB.' },
+      { question: 'Will non-PDF files maintain their visual quality?', answer: 'Yes! Images and documents are rendered at high resolution and fitted to standard pages without lossy compression.' },
       { question: 'Can I merge password-protected PDFs?', answer: 'Password-protected PDFs need to be decrypted first. Use our Decrypt PDF tool to remove the password before merging.' },
     ],
   },
@@ -174,28 +175,28 @@ export const toolContentEn: Record<string, ToolContent> = {
 
   'edit-pdf': {
     title: 'Edit PDF',
-    metaDescription: 'Edit PDF files online. Add text, images, annotations, highlights, and shapes to your documents.',
-    keywords: ['edit pdf', 'pdf editor', 'annotate pdf', 'add text to pdf', 'pdf markup'],
+    metaDescription: 'Directly edit PDF text and images online. Click paragraphs to edit in-place with live reflow, replace images, and find & replace across documents.',
+    keywords: ['edit pdf', 'pdf editor', 'edit pdf text', 'direct pdf editing', 'in-place pdf editor', 'modify pdf text'],
     description: `
-      <p>Edit PDF provides a comprehensive set of tools for modifying and annotating your PDF documents. Add text, images, shapes, highlights, comments, and more without needing expensive desktop software.</p>
-      <p>The intuitive editor interface makes it easy to mark up documents for review, add notes for collaboration, redact sensitive information, or enhance documents with additional content.</p>
-      <p>All editing happens locally in your browser, ensuring complete privacy for your sensitive documents.</p>
+      <p>Edit PDF provides high-fidelity in-place text and image editing powered by WebAssembly PDFium engine. Click directly into existing paragraphs to edit text just like a word processor, with automatic line re-wrapping and reflow.</p>
+      <p>Fine-tune your layout using the property inspector dock (font size, color, line height, alignment), replace or flip images, or batch find and replace text across the entire document. Switch to Classic Annotation mode anytime if you need freehand drawing, stamps, or form signatures.</p>
+      <p>All edits run strictly client-side inside your browser, guaranteeing 100% privacy and security for your files.</p>
     `,
     howToUse: [
       { step: 1, title: 'Upload Your PDF', description: 'Drag and drop your PDF file or click to select the document you want to edit.' },
-      { step: 2, title: 'Select Editing Tool', description: 'Choose from the toolbar: text, highlight, shapes, images, comments, or redaction tools.' },
-      { step: 3, title: 'Make Your Edits', description: 'Click on the document to add annotations, drag to position elements, and use the properties panel to customize.' },
-      { step: 4, title: 'Save and Download', description: 'Click Save to apply your changes and download the edited PDF.' },
+      { step: 2, title: 'Click to Edit Text Directly', description: 'Click or double-click any paragraph or heading to start editing with live reflow.' },
+      { step: 3, title: 'Format & Modify Images', description: 'Adjust typography via the inspector dock, or right-click images to replace or flip them.' },
+      { step: 4, title: 'Save & Download', description: 'Click Save Changes in the top right toolbar to export the updated PDF.' },
     ],
     useCases: [
-      { title: 'Document Review', description: 'Add comments, highlights, and markup to documents for collaborative review processes.', icon: 'message-square' },
-      { title: 'Form Completion', description: 'Fill in text fields, add signatures, and complete PDF forms without printing.', icon: 'edit-3' },
-      { title: 'Content Redaction', description: 'Permanently remove sensitive information from documents before sharing.', icon: 'eye-off' },
+      { title: 'Fix Typographical Errors', description: 'Correct typos, names, dates, or prices directly on the original document without opening source files.', icon: 'edit-3' },
+      { title: 'Global Find & Replace', description: 'Search keywords across all pages and replace them seamlessly in-place.', icon: 'search' },
+      { title: 'Update Graphics & Logos', description: 'Swap out outdated logos, diagrams, or signatures with newly uploaded images.', icon: 'image' },
     ],
     faq: [
-      { question: 'Can I edit the original text in the PDF?', answer: 'Yes. Select Edit text in the PDF toolbar, click an existing text block, enter the replacement, and apply it. Text is permanently replaced in the exported PDF.' },
-      { question: 'Are my edits permanent?', answer: 'Annotations can be flattened to make them permanent, or kept as editable layers depending on your preference.' },
-      { question: 'Can I undo my changes?', answer: 'Yes, the editor supports undo/redo functionality. You can also reset to the original document at any time before saving.' },
+      { question: 'Can I directly edit existing text in the PDF?', answer: 'Yes! The editor features direct content editing. Simply click any existing text block or paragraph to type, delete, and reformat with live reflow.' },
+      { question: 'Can I still add annotations, stamps, and signatures?', answer: 'Yes! Use the mode switch toggle in the header anytime to switch to Classic Annotation mode for stamps, freehand drawing, and forms.' },
+      { question: 'Are my files kept private and secure?', answer: 'Absolutely. All PDF decoding, text clustering, re-wrapping, and stream splicing run entirely in your local browser through WebAssembly.' },
     ],
   },
 
@@ -236,7 +237,7 @@ export const toolContentEn: Record<string, ToolContent> = {
     `,
     howToUse: [
       { step: 1, title: 'Upload Your PDF', description: 'Drag and drop your PDF file or click to select the document you need to sign.' },
-      { step: 2, title: 'Create Your Signature', description: 'Draw your signature with mouse or touch, type your name to generate a signature, or upload a signature image.' },
+      { step: 2, title: 'Create Your Signature', description: 'Draw your signature with mouse or touch, type your name to generate a signature, or upload a signature image. You can also scan a photo of a signature written on paper.' },
       { step: 3, title: 'Place and Adjust', description: 'Click on the document to place your signature, then drag to position and resize as needed.' },
       { step: 4, title: 'Save and Download', description: 'Click Save to apply your signature and download the signed PDF.' },
     ],
@@ -1904,27 +1905,28 @@ export const toolContentEn: Record<string, ToolContent> = {
 
   'edit-metadata': {
     title: 'Edit Metadata',
-    metaDescription: 'Edit PDF document properties. Change title, author, subject, and keywords.',
-    keywords: ['edit pdf metadata', 'change pdf properties', 'pdf author', 'document info'],
+    metaDescription: 'Edit PDF document properties. Change title, author, subject, keywords, creation date, and modification date.',
+    keywords: ['edit pdf metadata', 'change pdf properties', 'pdf author', 'document info', 'pdf creation date', 'pdf modification date'],
     description: `
-      <p>Edit Metadata allows you to modify document properties in your PDF files. Change the title, author, subject, keywords, and other metadata fields.</p>
-      <p>Perfect for correcting document information, adding proper attribution, or preparing files for distribution.</p>
+      <p>Edit Metadata allows you to modify document properties in your PDF files. Change the title, author, subject, keywords, creator, producer, and document dates.</p>
+      <p>You can set custom creation and modification dates, perfect for correcting document information, adding proper attribution, or preparing files for distribution.</p>
       <p>All editing happens in your browser, ensuring your documents remain private.</p>
     `,
     howToUse: [
       { step: 1, title: 'Upload Your PDF', description: 'Drag and drop your PDF file or click to select.' },
-      { step: 2, title: 'Edit Properties', description: 'Modify title, author, subject, keywords, and other fields.' },
-      { step: 3, title: 'Save and Download', description: 'Click Save to apply changes and download.' },
+      { step: 2, title: 'Edit Properties & Dates', description: 'Modify title, author, subject, keywords, creation date, modification date, and other fields.' },
+      { step: 3, title: 'Save and Download', description: 'Click Save to apply changes and download the updated PDF.' },
     ],
     useCases: [
       { title: 'Add Attribution', description: 'Set proper author and creator information.', icon: 'user' },
       { title: 'SEO Optimization', description: 'Add keywords and descriptions for searchability.', icon: 'search' },
+      { title: 'Correct Document Dates', description: 'Fix creation or modification dates for accurate records.', icon: 'calendar' },
       { title: 'Document Preparation', description: 'Prepare documents with proper metadata before sharing.', icon: 'file-check' },
     ],
     faq: [
-      { question: 'What fields can I edit?', answer: 'Title, author, subject, keywords, creator, and producer fields.' },
-      { question: 'Can I clear all metadata?', answer: 'Use Remove Metadata tool to strip all document properties.' },
-      { question: 'Are dates editable?', answer: 'Creation and modification dates are updated automatically.' },
+      { question: 'What fields can I edit?', answer: 'Title, author, subject, keywords, creator, producer, creation date, and modification date.' },
+      { question: 'Can I clear all metadata?', answer: 'Use the Remove Metadata tool to strip all document properties.' },
+      { question: 'Are dates editable?', answer: 'Yes! You can set custom creation and modification dates using the date picker fields. If you leave the modification date empty, it will be auto-updated to the current time when you save.' },
     ],
   },
 
@@ -2218,6 +2220,33 @@ export const toolContentEn: Record<string, ToolContent> = {
     ],
   },
 
+  'redact-pdf': {
+    title: 'Redact PDF',
+    metaDescription: 'Visually blackout, mosaic, or blur sensitive information in PDF files. Irreversible physical rasterization and deep metadata sanitization for privacy protection.',
+    keywords: ['redact pdf', 'blackout pdf', 'mosaic pdf', 'blur pdf', 'pdf privacy', 'remove sensitive data', 'secure pdf editor'],
+    description: `
+      <p>Redact PDF provides a visual, interactive editor to permanently conceal and protect sensitive data in your PDF documents. Drag to mark any confidential area—such as names, addresses, ID numbers, signatures, official seals, financial figures, or portraits—and apply blackout, whiteout, mosaic, or blur effects.</p>
+      <p>Unlike standard PDF editors that simply superimpose superficial black rectangles over existing text, this tool performs <strong>irreversible physical pixel rasterization</strong>. The underlying text layers, vector graphics, and OCR streams are completely destroyed and cannot be recovered by copy-pasting or reverse-engineering.</p>
+      <p>Additionally, the tool performs deep metadata wiping, eliminating author information, creation history, and XMP streams. All processing runs 100% locally in your browser with zero server uploads.</p>
+    `,
+    howToUse: [
+      { step: 1, title: 'Upload PDF Document', description: 'Select or drag-and-drop the PDF file you wish to redact.' },
+      { step: 2, title: 'Mark Sensitive Areas', description: 'Click and drag on any page to draw redaction boxes around confidential content.' },
+      { step: 3, title: 'Choose Redaction Style', description: 'Select blackout, whiteout, mosaic (adjustable pixel size), or blur. Toggle real-time preview to inspect the result.' },
+      { step: 4, title: 'Export Secured PDF', description: 'Click "Generate Secured PDF" to execute irreversible flattening, metadata wiping, and download your secured document.' },
+    ],
+    useCases: [
+      { title: 'Privacy & Regulatory Compliance', description: 'Safely mask Personally Identifiable Information (PII) to comply with GDPR, HIPAA, or CCPA requirements.', icon: 'shield' },
+      { title: 'Confidential Legal & Business Sharing', description: 'Obscure trade secrets, settlement terms, signatures, and stamps prior to public disclosure or external distribution.', icon: 'file-text' },
+      { title: 'Financial & Identity Protection', description: 'Conceal bank account numbers, tax IDs, credit card details, and ID card numbers from statements and invoices.', icon: 'lock' },
+    ],
+    faq: [
+      { question: 'Can anyone recover redacted information by copying text or inspecting layers?', answer: 'No. The redacted areas undergo physical pixel burn-in flattening. Underlying text, vectors, and objects are completely removed from the file structure, making recovery impossible.' },
+      { question: 'What is the difference between blackout, mosaic, and blur?', answer: 'Blackout creates a solid black mask (standard for legal documents); whiteout provides a clean white mask; mosaic creates a pixelated grid; and blur produces a soft frosted glass effect.' },
+      { question: 'Are files uploaded to your servers?', answer: 'No. All rendering, redaction, flattening, and PDF generation occur entirely within your browser memory. Your documents never leave your device.' },
+      { question: 'What metadata is removed?', answer: 'Document Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate, and extended XMP metadata streams are thoroughly erased.' },
+    ],
+  },
 
   'decrypt-pdf': {
     title: 'Decrypt PDF',

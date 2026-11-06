@@ -55,7 +55,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             onClick={reset}
             style={{
               padding: '0.75rem 1.5rem',
-              backgroundColor: '#9a7208', /* Northbrand Gold Deep */
+              backgroundColor: '#3b82f6',
               color: 'white',
               border: 'none',
               borderRadius: '0.5rem',

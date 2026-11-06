@@ -2,36 +2,36 @@
 
 /* PDFCraft Design System - CSS Variables for Theming */
 :root {
-  /* Primary Colors - Northbrand Gold Deep #9a7208 (light mode) */
-  --color-primary: 44 90% 32%;
+  /* Primary Colors - Deep Blue/Indigo for trust and modern tech feel */
+  --color-primary: 226 71% 55%; /* #3b82f6 - slightly more vibrant */
   --color-primary-foreground: 0 0% 100%;
-  --color-primary-hover: 43 91% 26%;
+  --color-primary-hover: 226 71% 45%;
   
-  /* Secondary Colors - warm paper neutrals */
-  --color-secondary: 48 26% 88%;
-  --color-secondary-foreground: 225 17% 9%;
-  --color-secondary-hover: 48 24% 80%;
+  /* Secondary Colors - Slate for neutral elements */
+  --color-secondary: 215 20% 90%;
+  --color-secondary-foreground: 215 25% 15%;
+  --color-secondary-hover: 215 20% 80%;
   
-  /* Accent Colors - Northbrand Gold #c9a227 */
-  --color-accent: 46 68% 47%;
-  --color-accent-foreground: 225 17% 9%;
+  /* Accent Colors - Teal/Cyan for highlights */
+  --color-accent: 172 66% 50%;
+  --color-accent-foreground: 0 0% 100%;
   
-  /* Background Colors - Northbrand Paper #f4f3ec, Ink #14161c */
-  --color-background: 52 27% 94%;
-  --color-foreground: 225 17% 9%;
+  /* Background Colors */
+  --color-background: 210 40% 98%; /* Slightly off-white for depth */
+  --color-foreground: 222 47% 11%;
   
-  /* Muted Colors - warm grays */
-  --color-muted: 48 24% 92%;
-  --color-muted-foreground: 228 9% 42%;
+  /* Muted Colors */
+  --color-muted: 210 40% 96%;
+  --color-muted-foreground: 215 16% 47%;
   
-  /* Card Colors - DNA card #fffdf9 */
-  --color-card: 40 100% 99%;
-  --color-card-foreground: 225 17% 9%;
+  /* Card Colors */
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 222 47% 11%;
   
-  /* Border Colors - warm hairlines, gold focus ring */
-  --color-border: 45 23% 83%;
-  --color-input: 45 23% 83%;
-  --color-ring: 44 90% 32%;
+  /* Border Colors */
+  --color-border: 214 32% 91%;
+  --color-input: 214 32% 91%;
+  --color-ring: 226 71% 55%;
   
   /* Destructive Colors */
   --color-destructive: 0 84% 60%;
@@ -45,8 +45,7 @@
   --color-warning: 38 92% 50%;
   --color-warning-foreground: 0 0% 100%;
   
-  /* Typography - sans body, serif display (DNA) */
-  --font-display: Georgia, 'Playfair Display', 'Times New Roman', serif;
+  /* Typography */
   --font-sans: var(--font-inter, 'Inter'), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: var(--font-jetbrains-mono, 'JetBrains Mono'), 'Fira Code', Consolas, monospace;
   
@@ -59,11 +58,11 @@
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
   
-  /* Border Radius - DNA range 14 to 18px for cards */
+  /* Border Radius */
   --radius-sm: 0.375rem;
-  --radius-md: 0.875rem;
+  --radius-md: 0.75rem;
   --radius-lg: 1rem;
-  --radius-xl: 1.125rem;
+  --radius-xl: 1.5rem;
   --radius-full: 9999px;
   
   /* Shadows - Layered, smoother shadows for depth */
@@ -82,38 +81,34 @@
 /* Dark Mode Theme */
 .dark {
   color-scheme: dark;
-  --color-primary: 42 79% 57%; /* Northbrand Gold Bright #e8b33c */
-  --color-primary-foreground: 225 17% 9%;
-  --color-primary-hover: 42 79% 65%;
+  --color-primary: 226 71% 60%;
+  --color-primary-foreground: 222 47% 11%;
+  --color-primary-hover: 226 71% 70%;
   
-  --color-secondary: 228 16% 18%;
-  --color-secondary-foreground: 52 27% 94%;
-  --color-secondary-hover: 228 16% 26%;
+  --color-secondary: 215 20% 20%;
+  --color-secondary-foreground: 210 40% 98%;
+  --color-secondary-hover: 215 20% 30%;
   
-  --color-accent: 42 79% 57%;
-  --color-accent-foreground: 225 17% 9%;
+  --color-accent: 172 66% 50%;
+  --color-accent-foreground: 222 47% 11%;
   
-  --color-background: 225 17% 9%; /* Northbrand Ink #14161c */
-  --color-foreground: 52 27% 94%;
+  --color-background: 222 47% 7%; /* Darker background for more contrast */
+  --color-foreground: 210 40% 98%;
   
-  --color-muted: 227 15% 12%;
-  --color-muted-foreground: 228 12% 65%;
+  --color-muted: 217 33% 13%;
+  --color-muted-foreground: 215 20% 65%;
   
-  --color-card: 225 17% 14%; /* hub card #1d2029 */
-  --color-card-foreground: 52 27% 94%;
+  --color-card: 222 47% 10%;
+  --color-card-foreground: 210 40% 98%;
   
-  --color-border: 227 17% 21%; /* hub card line #2c303e */
-  --color-input: 227 17% 21%;
-  --color-ring: 42 79% 57%;
+  --color-border: 217 33% 15%;
+  --color-input: 217 33% 15%;
+  --color-ring: 226 71% 60%;
 }
 
 /* Base Styles */
 * {
   border-color: hsl(var(--color-border));
-}
-
-h1, h2, h3 {
-  font-family: var(--font-display);
 }
 
 body {
@@ -166,7 +161,6 @@ select option {
   
   /* Font Family */
   --font-sans: var(--font-sans);
-  --font-display: var(--font-display);
   --font-mono: var(--font-mono);
 }
 
@@ -200,7 +194,7 @@ select option {
 }
 
 .dark .glass {
-  background: rgba(20, 22, 28, 0.6);
+  background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -212,7 +206,7 @@ select option {
 }
 
 .dark .glass-card {
-  background: linear-gradient(135deg, rgba(29, 32, 41, 0.7), rgba(20, 22, 28, 0.4));
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.4));
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
